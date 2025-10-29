@@ -37,3 +37,11 @@ Arm Circle Detection:
     Tracks the angle between shoulder center and wrist center
     Accumulates rotation degrees
     Counts a circle when 300° of rotation is accumulated
+
+
+
+How tp be more accurate:
+- put more accurate data and use another ai model to trace the pattern of it
+- then compare it to it instead of direct comparison to the video angles.
+- talk to physiotherapist
+- test with professional and user
