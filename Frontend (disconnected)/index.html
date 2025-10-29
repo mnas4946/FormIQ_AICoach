@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formIQ - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="#6366F1"/>
+                    <path d="M16 8L20 14H12L16 8Z" fill="white"/>
+                    <path d="M12 18H20V24H12V18Z" fill="white"/>
+                </svg>
+                <span class="logo-text">formIQ</span>
+            </div>
+        </div>
+        <div class="nav-right">
+            <a href="index.html" class="nav-link active">Dashboard</a>
+            <a href="#" class="nav-link">Messages</a>
+            <a href="#" class="nav-link">Account</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1 class="welcome-title">Welcome back, Maria 👋</h1>
+            <p class="welcome-subtitle">How are you today?</p>
+        </section>
+
+        <!-- Start Exercise Card -->
+        <section class="exercise-card-section">
+            <div class="exercise-card" onclick="window.location.href='exercise.html'">
+                <div class="exercise-card-content">
+                    <div class="exercise-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="24" r="24" fill="#6366F1" fill-opacity="0.1"/>
+                            <path d="M24 14V34M14 24H34" stroke="#6366F1" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="exercise-card-text">
+                        <h2>Start Today's Exercise</h2>
+                        <p>Your personalized physio session awaits</p>
+                    </div>
+                    <div class="exercise-card-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 18L15 12L9 6" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Overview -->
+        <section class="performance-section">
+            <h2 class="section-title">Performance Overview</h2>
+            
+            <div class="stats-grid">
+                <!-- Stat Card 1 -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #10B981;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Sessions This Week</p>
+                        <p class="stat-value">12</p>
+                        <p class="stat-change positive">+3 from last week</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 2 -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #F59E0B;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 10V3L4 14H11L11 21L20 10L13 10Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Average Duration</p>
+                        <p class="stat-value">23 min</p>
+                        <p class="stat-change positive">+2 min from last week</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 3 -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #6366F1;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8V16M12 11V16M8 14V16M6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Form Accuracy</p>
+                        <p class="stat-value">87%</p>
+                        <p class="stat-change positive">+5% improvement</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 4 -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #EF4444;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.318 6.318C5.489 5.147 7.126 4.5 9 4.5H15C16.874 4.5 18.511 5.147 19.682 6.318C20.853 7.489 21.5 9.126 21.5 11V13C21.5 14.874 20.853 16.511 19.682 17.682C18.511 18.853 16.874 19.5 15 19.5H9C7.126 19.5 5.489 18.853 4.318 17.682C3.147 16.511 2.5 14.874 2.5 13V11C2.5 9.126 3.147 7.489 4.318 6.318Z" stroke="white" stroke-width="2"/>
+                            <path d="M12 8V12L14 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Current Streak</p>
+                        <p class="stat-value">7 days</p>
+                        <p class="stat-change positive">Keep it up! 🔥</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h3 class="activity-title">Recent Sessions</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-dot" style="background: #10B981;"></div>
+                        <div class="activity-content">
+                            <p class="activity-name">Squats Session</p>
+                            <p class="activity-time">Today, 9:30 AM</p>
+                        </div>
+                        <div class="activity-badge success">Completed</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-dot" style="background: #10B981;"></div>
+                        <div class="activity-content">
+                            <p class="activity-name">Arm Circles</p>
+                            <p class="activity-time">Yesterday, 10:15 AM</p>
+                        </div>
+                        <div class="activity-badge success">Completed</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-dot" style="background: #6366F1;"></div>
+                        <div class="activity-content">
+                            <p class="activity-name">Leg Extensions</p>
+                            <p class="activity-time">2 days ago, 8:45 AM</p>
+                        </div>
+                        <div class="activity-badge success">Completed</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
