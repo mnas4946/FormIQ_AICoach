@@ -27,8 +27,8 @@
     <!-- Pre-Exercise Timeline Overlay (shown first) -->
     <div class="timeline-overlay" id="timelineOverlay">
         <div class="timeline-modal">
-            <h2 class="timeline-title">Your Exercise Session</h2>
-            <p class="timeline-subtitle">Complete all exercises to finish your workout</p>
+            <h2 class="timeline-title">Your Rehabilitation Session</h2>
+            <p class="timeline-subtitle">Complete all exercises to finish your recovery session</p>
             
             <div class="exercise-timeline">
                 <div class="timeline-item completed">
@@ -218,6 +218,22 @@
                     <p class="progress-text"><span id="progressPercent">0</span>% Complete</p>
                 </div>
             </div>
+
+            <!-- Next Exercise Card -->
+            <div class="next-exercise-card">
+                <div class="next-exercise-header">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 3L8 6H4V14H8L11 17V3Z" fill="#6366F1"/>
+                        <path d="M13.74 5.56C14.5845 6.40467 14.9978 7.57568 14.9978 8.8C14.9978 10.0243 14.5845 11.1953 13.74 12.04" stroke="#6366F1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16.6 2.4C17.8793 3.67946 18.6043 5.36068 18.6043 7.1C18.6043 8.83932 17.8793 10.5205 16.6 11.8" stroke="#6366F1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="next-exercise-title">Next Exercise</h3>
+                </div>
+                <div class="next-exercise-content">
+                    <p class="next-exercise-name">Push-ups</p>
+                    <p class="next-exercise-details">12 reps × 2 sets</p>
+                </div>
+            </div>
         </aside>
     </main>
 
@@ -230,8 +246,8 @@
                     <path d="M25 40L35 50L55 30" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <h2 class="completion-title">Great Work, Maria! 🎉</h2>
-            <p class="completion-subtitle">You've completed your exercise session</p>
+            <h2 class="completion-title">Great Progress, Maria! 🎉</h2>
+            <p class="completion-subtitle">You've completed your rehabilitation session</p>
             
             <div class="completion-stats">
                 <div class="completion-stat">
@@ -249,8 +265,8 @@
             </div>
 
             <div class="completion-actions">
-                <button class="btn-secondary" onclick="restartExercise()">Do Another Set</button>
-                <button class="btn-primary" onclick="window.location.href='index.html'">Back to Dashboard</button>
+                <button class="btn-secondary" onclick="restartExercise()">Back to Dashboard</button>
+                <button class="btn-primary" onclick="window.location.href='index.html'">See Detailed Performance</button>
             </div>
         </div>
     </div>

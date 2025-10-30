@@ -1,6 +1,4 @@
 """
-EXTRACT CORRECT SQUAT REFERENCE ANGLES
-=======================================
 PURPOSE: Extract reference angles from images showing correct squat form.
          These reference angles can be used to compare against real-time performance.
 
@@ -20,9 +18,7 @@ from ultralytics import YOLO
 import json
 import os
 
-# ========================================
 # CONFIGURATION
-# ========================================
 
 # Paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -41,9 +37,8 @@ UP_JSON = os.path.join(OUTPUT_DIR, "squat_up.json")
 MODEL_PATH = os.path.join(SCRIPT_DIR, "..", "yolov8n-pose.pt")
 yolo = YOLO(MODEL_PATH)
 
-# ========================================
+
 # HELPER FUNCTIONS
-# ========================================
 
 def compute_angle_deg(a, b, c):
     """

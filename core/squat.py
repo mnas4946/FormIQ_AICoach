@@ -16,9 +16,10 @@ from typing import Dict
 # SQUAT THRESHOLDS & CONSTANTS
 # ========================================
 
-# Squat detection thresholds (knee angle in degrees)
-SQUAT_DOWN_ANGLE = 100         # Below this angle = "down" position
-SQUAT_UP_ANGLE = 160           # Above this angle = "up" position
+# The reference angles (56° down, 166° up) are IDEAL form targets used by SquatReferenceChecker.
+# Reps are counted when knees drop below 80° (vs ideal 56°) to allow for imperfect but valid squats.
+SQUAT_DOWN_ANGLE = 80          # Below this angle = "down" position for rep counting
+SQUAT_UP_ANGLE = 150           # Above this angle = "up" position for rep counting
 
 # Rep counting
 CONSECUTIVE_CONFIRM = 3        # Number of consecutive frames needed to confirm a phase change
@@ -149,6 +150,7 @@ class SquatReferenceChecker:
         except Exception as e:
             print(f"⚠️  Could not load squat references: {e}")
             print(f"   Using default fallback values")
+            
             # Set default fallback values
             self.references = {
                 'down': {'angles': {'avg_knee': 56.0, 'avg_hip': 52.0, 'torso_lean': 29.0}},
