@@ -24,6 +24,7 @@
         </button>
     </header>
 
+<<<<<<< HEAD
     <!-- Pre-Exercise Timeline Overlay (shown first) -->
     <div class="timeline-overlay" id="timelineOverlay">
         <div class="timeline-modal">
@@ -109,8 +110,10 @@
         </div>
     </div>
 
+=======
+>>>>>>> parent of 4adee53 (frontend)
     <!-- Main Exercise View -->
-    <main class="exercise-main" id="exerciseMain" style="display: none;">
+    <main class="exercise-main">
         <!-- Camera Section (Left - 70-80%) -->
         <section class="camera-section">
             <div class="camera-view">
@@ -126,18 +129,6 @@
                 
                 <!-- Pose Skeleton Overlay (hidden by default) -->
                 <canvas id="poseCanvas" class="pose-canvas"></canvas>
-                
-                <!-- TTS Feedback Overlay (like subtitles on camera view) -->
-                <div class="tts-bubble-overlay">
-                    <div class="tts-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M19 5.5C20.8565 7.35645 21.8964 9.8704 21.8964 12.485C21.8964 15.0996 20.8565 17.6135 19 19.47" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <p class="tts-text" id="feedbackText">Keep your back straight and lower yourself slowly.</p>
-                </div>
             </div>
 
             <!-- Control Buttons -->
@@ -166,6 +157,18 @@
 
         <!-- Tracking Panel (Right - 20-30%) -->
         <aside class="tracking-panel">
+            <!-- TTS Feedback Bubble -->
+            <div class="tts-bubble">
+                <div class="tts-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M19 5.5C20.8565 7.35645 21.8964 9.8704 21.8964 12.485C21.8964 15.0996 20.8565 17.6135 19 19.47" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <p class="tts-text" id="feedbackText">Keep your back straight and lower yourself slowly.</p>
+            </div>
+
             <!-- Reps Counter -->
             <div class="reps-counter">
                 <div class="reps-circle">
