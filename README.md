@@ -1,47 +1,211 @@
-1. extract_keypoints.py - Pose Extraction
-    Uses MoveNet (Google's pose estimation model) to extract skeletal keypoints from video files:
-    Processes videos frame-by-frame (with frame skipping for speed)
-    Detects 17 body keypoints (shoulders, elbows, hips, knees, etc.)
-    Saves keypoints as JSON files for later training
-    Example: Processes squat and arm circle videos
+# AI Coach - Modular Architecture
 
-2. prepare_sequences.py - Data Preprocessing
-    Prepares extracted keypoints for machine learning:
-    Loads JSON keypoint files
-    Normalizes data: centers pose and scales by shoulder distance
-    Slices long sequences into 30-frame windows (~1 second)
-    Data augmentation: horizontal flips and random jitter for better model generalization
+## 📁 File Structure
 
-3. train_autoencoders.py - Model Training
-    Trains LSTM autoencoder models to learn "normal" exercise patterns:
-    Creates separate autoencoders for squats and arm circles
-    Architecture: LSTM layers that compress sequences into a latent representation then reconstruct them
-    Trained to minimize reconstruction error (MSE)
-    Could be used for anomaly detection (abnormal movements would have high reconstruction error)
+```
+core/
+├── realtime_detection.py  ← ENTRY POINT - Main application
+├── squat.py              ← Squat-specific logic
+├── arm_circle.py         ← Arm circle-specific logic
+└── voice_feedback.py     ← Text-to-speech and feedback system
+```
 
-4. realtime_detection.py - Real-time AI Coach ⭐
-The main application that provides live exercise feedback:
-Key Features:
-    Uses YOLOv8-pose for real-time pose detection from webcam
-    Tracks two exercises: Squats and Arm Circles
-    Counts repetitions automatically
-    Provides real-time voice feedback using text-to-speech
-    Shows angle measurements and form tips on screen
-How it works:
-    Squat Detection:
-        Tracks knee angles (hip-knee-ankle)
-        Detects "down" position (angle < 100°)
-        Detects "up" position (angle > 160°)
-        Counts a rep when transitioning from down→up
-Arm Circle Detection:
-    Tracks the angle between shoulder center and wrist center
-    Accumulates rotation degrees
-    Counts a circle when 300° of rotation is accumulated
+---
 
+## 🎯 Module Responsibilities
 
+### **realtime_detection.py** (Entry Point)
+**Purpose:** Main application that coordinates everything
 
-How tp be more accurate:
-- put more accurate data and use another ai model to trace the pattern of it
-- then compare it to it instead of direct comparison to the video angles.
-- talk to physiotherapist
-- test with professional and user
+**Contains:**
+- ✅ Exercise selection menu
+- ✅ Configuration parameters
+- ✅ Pose detection model loading
+- ✅ Helper functions (geometry & smoothing)
+- ✅ Main video processing loop
+- ✅ Camera initialization
+- ✅ Keypoint extraction and processing
+
+**Does NOT contain:** Exercise-specific logic (moved to modules)
+
+---
+
+### **squat.py** (Squat Module)
+**Purpose:** All squat-specific functionality
+
+**Contains:**
+- ✅ `SQUAT_DOWN_ANGLE`, `SQUAT_UP_ANGLE` - Thresholds
+- ✅ `SquatState` - State machine for rep counting
+- ✅ `SquatReferenceChecker` - Compare against correct form
+- ✅ `generate_squat_feedback()` - Feedback rules
+
+**Exports:**
+```python
+from squat import SquatState, SquatReferenceChecker
+```
+
+---
+
+### **arm_circle.py** (Arm Circle Module)
+**Purpose:** All arm circle-specific functionality
+
+**Contains:**
+- ✅ `ARM_CIRCLE_ROTATION_TH` - Rotation threshold
+- ✅ `ArmCircleState` - State machine for rep counting
+- ✅ `generate_arm_circle_feedback()` - Feedback rules
+
+**Exports:**
+```python
+from arm_circle import ArmCircleState
+```
+
+---
+
+### **voice_feedback.py** (Voice & Feedback Module)
+**Purpose:** Text-to-speech and general feedback system
+
+**Contains:**
+- ✅ TTS engine initialization
+- ✅ Voice worker thread
+- ✅ `speak()` - Non-blocking text-to-speech
+- ✅ `stop_voice()` - Cleanup function
+- ✅ `feedback_generator()` - Dispatches to exercise-specific feedback
+
+**Exports:**
+```python
+from voice_feedback import speak, stop_voice, feedback_generator
+```
+
+---
+
+## 🚀 How to Run
+
+```bash
+cd core/
+python realtime_detection.py
+```
+
+**You'll see:**
+```
+============================================================
+AI COACH - EXERCISE SELECTION
+============================================================
+
+Available exercises:
+  [1] Squat
+  [2] Arm Circle
+  [3] Both (track both simultaneously)
+
+Select exercise (1/2/3): 
+```
+
+---
+
+## 🔧 How It Works
+
+### Flow Diagram
+
+```
+1. User selects exercise
+   ↓
+2. realtime_detection.py imports required modules
+   ↓
+3. Initializes state machines (from squat.py / arm_circle.py)
+   ↓
+4. Starts camera loop
+   ↓
+5. For each frame:
+   - Detect pose (YOLOv8)
+   - Calculate angles
+   - Update state machines
+   - Generate feedback (via voice_feedback.py)
+   - Display results
+```
+
+### Module Communication
+
+```
+realtime_detection.py (Main Loop)
+    ├─→ squat.py (if squat selected)
+    │   ├─→ SquatState.update(angle)
+    │   └─→ generate_squat_feedback(metrics)
+    │
+    ├─→ arm_circle.py (if arm circle selected)
+    │   ├─→ ArmCircleState.update(positions)
+    │   └─→ generate_arm_circle_feedback(metrics)
+    │
+    └─→ voice_feedback.py
+        ├─→ speak(message)
+        └─→ feedback_generator() → dispatches to squat/arm_circle
+```
+
+---
+
+## ✅ Benefits of This Structure
+
+1. **Modularity** - Each exercise has its own file
+2. **Maintainability** - Easy to find and update exercise-specific code
+3. **Extensibility** - Add new exercises by creating new modules
+4. **Testability** - Can test each module independently
+5. **Clean separation** - Entry point stays clean and focused
+
+---
+
+## 🔮 Adding a New Exercise
+
+To add a new exercise (e.g., "Push-up"):
+
+1. **Create `pushup.py`:**
+```python
+class PushupState:
+    def __init__(self):
+        # Your state machine
+        pass
+    
+    def update(self, angles):
+        # Your logic
+        pass
+
+def generate_pushup_feedback(metrics, ...):
+    # Your feedback rules
+    pass
+```
+
+2. **Update `voice_feedback.py`:**
+```python
+from pushup import generate_pushup_feedback
+
+def feedback_generator(...):
+    # Add:
+    elif exercise == "Push-up":
+        return generate_pushup_feedback(...)
+```
+
+3. **Update `realtime_detection.py`:**
+```python
+from pushup import PushupState
+
+# Add to selection menu
+print("  [4] Push-up")
+
+# Initialize if selected
+if selected_exercise == "Push-up":
+    pushup_state = PushupState()
+```
+
+Done! 🎉
+
+---
+
+## 📊 What Didn't Change
+
+Everything that works stays the same:
+- ✅ Pose detection logic
+- ✅ Angle calculations
+- ✅ Smoothing algorithms
+- ✅ Rep counting mechanisms
+- ✅ Visual overlays
+- ✅ Keyboard controls
+
+**The code is reorganized, not rewritten!**
+
