@@ -5,20 +5,6 @@ let targetReps = 10;
 let isExerciseActive = false;
 let isPaused = false;
 
-// Start session - hides timeline and shows exercise view
-function startSession() {
-    const timelineOverlay = document.getElementById('timelineOverlay');
-    const exerciseMain = document.getElementById('exerciseMain');
-    
-    if (timelineOverlay) {
-        timelineOverlay.style.display = 'none';
-    }
-    
-    if (exerciseMain) {
-        exerciseMain.style.display = 'flex';
-    }
-}
-
 // Feedback messages that rotate
 const feedbackMessages = [
     "Keep your back straight and lower yourself slowly.",
