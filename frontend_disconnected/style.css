@@ -979,7 +979,6 @@ body {
     background: var(--gray-300);
 }
 
-<<<<<<< HEAD
 /* ===== TIMELINE OVERLAY ===== */
 .timeline-overlay {
     position: fixed;
@@ -1208,8 +1207,6 @@ body {
     margin: 0;
 }
 
-=======
->>>>>>> parent of 4adee53 (frontend)
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
     .exercise-main {
@@ -1274,6 +1271,24 @@ body {
     .completion-stats {
         grid-template-columns: 1fr;
         gap: 1rem;
+    }
+    
+    .timeline-modal {
+        padding: 2rem 1.5rem;
+    }
+    
+    .timeline-title {
+        font-size: 1.5rem;
+    }
+    
+    .tts-bubble-overlay {
+        min-width: auto;
+        padding: 1rem;
+        max-width: 90%;
+    }
+    
+    .tts-bubble-overlay .tts-text {
+        font-size: 0.875rem;
     }
 }
 
