@@ -16,6 +16,7 @@ USAGE:
 import cv2
 import numpy as np
 import time
+import os
 from collections import deque
 from ultralytics import YOLO
 
@@ -83,12 +84,19 @@ FEEDBACK_COOLDOWN = 2.0        # Seconds between vocal feedback messages (preven
 # ========================================
 
 # Load YOLOv8 Pose model (nano version = fastest, good for real-time)
-# Model automatically downloads if not present
 # YOLOv8 detects 17 keypoints in COCO format:
 #   0: nose, 1-2: eyes, 3-4: ears, 5-6: shoulders,
 #   7-8: elbows, 9-10: wrists, 11-12: hips,
 #   13-14: knees, 15-16: ankles
-yolo = YOLO("yolov8n-pose.pt")  # lightweight pose model
+
+# Use existing model file instead of downloading every time
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "yolov8n-pose.pt")
+if not os.path.exists(MODEL_PATH):
+    # Fallback to parent directory
+    MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "yolov8n-pose.pt")
+
+print(f"✓ Loading model from: {MODEL_PATH}")
+yolo = YOLO(MODEL_PATH)  # lightweight pose model
 
 # ========================================
 # HELPER FUNCTIONS: Geometry & Smoothing
