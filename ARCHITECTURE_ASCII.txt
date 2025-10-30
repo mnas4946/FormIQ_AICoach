@@ -1,0 +1,284 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                     AI COACH - SYSTEM ARCHITECTURE                            ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          HIGH-LEVEL ARCHITECTURE                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────┐
+    │   USER    │
+    │  Camera   │
+    └─────┬─────┘
+          │ video feed
+          ▼
+    ┌─────────────────────────────────────────┐
+    │    CORE APPLICATION LAYER               │
+    │                                         │
+    │  ┌──────────────────────────────────┐  │
+    │  │  realtime_detection.py           │  │
+    │  │  (Main Entry Point)              │  │
+    │  │                                  │  │
+    │  │  • Exercise Selection            │  │
+    │  │  • Video Processing Loop         │  │
+    │  │  • Angle Calculation             │  │
+    │  │  • Smoothing & Filtering         │  │
+    │  └──────────┬───────────────────────┘  │
+    │             │                           │
+    │             ▼                           │
+    │  ┌──────────────────────────────────┐  │
+    │  │  YOLOv8 Pose Detection Model     │  │
+    │  │  (yolov8n-pose.pt)               │  │
+    │  │                                  │  │
+    │  │  Output: 17 body keypoints       │  │
+    │  └──────────────────────────────────┘  │
+    └──────────┬────────────┬─────────────────┘
+               │            │
+    ┌──────────▼───┐    ┌──▼──────────────┐
+    │              │    │                 │
+    │              │    │                 │
+
+┌──────────────────┐        ┌────────────────────┐        ┌──────────────────┐
+│ EXERCISE MODULES │        │  SUPPORT SYSTEMS   │        │  REFERENCE DATA  │
+└──────────────────┘        └────────────────────┘        └──────────────────┘
+
+┌─────────────────┐         ┌─────────────────────┐      ┌────────────────────┐
+│  squat.py       │         │ voice_feedback.py   │      │ data/reference/    │
+│                 │         │                     │      │                    │
+│ • SquatState    │────────▶│ • TTS Engine        │      │ • squat_down.json  │
+│ • Rep Counting  │         │ • Feedback Queue    │      │ • squat_up.json    │
+│ • Form Checker  │         │ • speak()           │      │ • Reference poses  │
+│ • Feedback Gen  │         │ • Dispatches msgs   │      │                    │
+└─────────────────┘         └─────────┬───────────┘      └──────────┬─────────┘
+                                      │                              │
+┌─────────────────┐                   │                              │
+│ arm_circle.py   │                   │                              │
+│                 │                   │                              │
+│ • ArmState      │───────────────────┘                              │
+│ • Rep Counting  │                                                  │
+│ • Rotation      │                                                  │
+│ • Feedback Gen  │                                                  │
+└─────────────────┘                                                  │
+         ▲                                                           │
+         │                                                           │
+         └───────────────────────────────────────────────────────────┘
+                        references reference poses
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              DATA FLOW DIAGRAM                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  ┌────────┐
+  │ CAMERA │
+  └───┬────┘
+      │ Raw Frames (BGR)
+      ▼
+  ┌─────────────────┐
+  │ POSE DETECTION  │
+  │    (YOLOv8)     │
+  └───┬─────────────┘
+      │ 17 Keypoints (x, y, confidence)
+      ▼
+  ┌─────────────────┐
+  │   SMOOTHING     │
+  │ Moving Average  │
+  └───┬─────────────┘
+      │ Smoothed Keypoints
+      ▼
+  ┌─────────────────┐
+  │ ANGLE CALC      │
+  │ Hip/Knee/Elbow  │
+  └───┬─────────────┘
+      │ Angles (degrees)
+      ▼
+  ┌─────────────────┐
+  │ STATE MACHINE   │
+  │ Update States   │
+  └───┬─────────────┘
+      │ Rep Count, Metrics
+      ├──────────────┬────────────────┐
+      ▼              ▼                ▼
+  ┌─────────┐   ┌──────────┐   ┌──────────┐
+  │ VISUAL  │   │  VOICE   │   │ METRICS  │
+  │ OVERLAY │   │ FEEDBACK │   │ DISPLAY  │
+  └─────────┘   └──────────┘   └──────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           MODULE DEPENDENCIES                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+                    realtime_detection.py
+                            │
+                ┌───────────┼───────────┐
+                │           │           │
+                ▼           ▼           ▼
+            squat.py   arm_circle.py   voice_feedback.py
+                │           │               ▲
+                └───────────┴───────────────┘
+                        │
+                        ▼
+                (feedback generation)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SQUAT STATE MACHINE                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────┐
+    │  STANDING   │◄─────────────┐
+    │ (angle>160°)│              │
+    └──────┬──────┘              │
+           │                     │
+           │ angle < 140°        │ angle > 160°
+           ▼                     │
+    ┌─────────────┐              │
+    │ DESCENDING  │              │
+    │ (going down)│              │
+    └──────┬──────┘              │
+           │                     │
+           │ angle < 90°         │
+           ▼                     │
+    ┌─────────────┐              │
+    │   BOTTOM    │              │
+    │ (full squat)│              │
+    └──────┬──────┘              │
+           │                     │
+           │ angle > 90°         │
+           ▼                     │
+    ┌─────────────┐              │
+    │  ASCENDING  │──────────────┘
+    │ (going up)  │   Rep +1
+    └─────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            FILE STRUCTURE                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Kinda_works_aiphysio/
+│
+├── core/                           ← Main application code
+│   ├── realtime_detection.py      ← ENTRY POINT
+│   ├── squat.py                    ← Squat exercise module
+│   ├── arm_circle.py               ← Arm circle exercise module
+│   └── voice_feedback.py           ← TTS and feedback system
+│
+├── data/
+│   ├── reference/                  ← Reference pose data
+│   │   ├── squat_down.json
+│   │   ├── squat_up.json
+│   │   ├── squat_down_annotated.png
+│   │   └── squat_up_annotated.png
+│   ├── squat_pictures/
+│   └── extract_squat.py
+│
+├── frontend_disconnected/          ← Web UI (not connected)
+│   ├── index.html
+│   ├── exercise.html
+│   ├── script.js
+│   └── style.css
+│
+├── yolov8n-pose.pt                ← Pose detection model
+├── README.md                       ← Documentation
+├── ARCHITECTURE.md                 ← Architecture diagrams
+└── HOW_TO_RUN.md                  ← Setup instructions
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          TECHNOLOGY STACK                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ┌────────────────────────────────────────┐
+    │         Python 3.x Runtime             │
+    └────────────────────────────────────────┘
+                    │
+        ┌───────────┼───────────┐
+        │           │           │
+        ▼           ▼           ▼
+    ┌────────┐  ┌────────┐  ┌──────────┐
+    │OpenCV  │  │ YOLO   │  │ pyttsx3  │
+    │ (cv2)  │  │ v8     │  │  (TTS)   │
+    └────────┘  └────────┘  └──────────┘
+        │           │           │
+        └───────────┼───────────┘
+                    │
+                    ▼
+            ┌───────────────┐
+            │    NumPy      │
+            │ (Processing)  │
+            └───────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        KEY COMPONENTS SUMMARY                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║ Component              │ Responsibility                                    ║
+╠════════════════════════╪═══════════════════════════════════════════════════╣
+║ realtime_detection.py  │ Main coordinator, camera, display                 ║
+║ squat.py               │ Squat tracking, state machine, form checking      ║
+║ arm_circle.py          │ Arm circle tracking, rotation detection           ║
+║ voice_feedback.py      │ Text-to-speech, feedback generation               ║
+║ YOLOv8 Model           │ Pose estimation (17 keypoints)                    ║
+║ Reference Data         │ Correct form templates for comparison             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         EXECUTION FLOW                                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1. START APPLICATION
+   └─→ User selects exercise (squat/arm circle/both)
+
+2. INITIALIZATION
+   └─→ Load YOLOv8 model
+   └─→ Initialize camera
+   └─→ Create state machines
+   └─→ Start TTS engine
+
+3. MAIN LOOP (60 FPS)
+   └─→ Capture frame
+   └─→ Detect pose keypoints
+   └─→ Calculate joint angles
+   └─→ Update state machine
+   └─→ Check form vs reference
+   └─→ Generate feedback (if needed)
+   └─→ Render visual overlay
+   └─→ Display result
+
+4. CLEANUP
+   └─→ Stop TTS
+   └─→ Release camera
+   └─→ Exit
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                              END OF DIAGRAM
+═══════════════════════════════════════════════════════════════════════════════
+
