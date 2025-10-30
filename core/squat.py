@@ -290,11 +290,13 @@ def generate_squat_feedback(metrics, last_feedback_time, feedback_cooldown=2.0):
                 speak_text = "Try lowering a bit more to hit full depth."
         elif avg_knee < 75:
             screen_text.append("Nice depth, control the movement.")
-            if now - last_feedback_time > feedback_cooldown:
-                speak_text = "Good depth. Keep control on the way up."
+            # Don't speak for good form - only show on screen
+            # if now - last_feedback_time > feedback_cooldown:
+            #     speak_text = "Good depth. Keep control on the way up."
         else:
             screen_text.append("Good squat depth.")
-            if now - last_feedback_time > feedback_cooldown:
-                speak_text = "Good squat. Keep your chest up."
+            # Don't speak for good form - only show on screen
+            # if now - last_feedback_time > feedback_cooldown:
+            #     speak_text = "Good squat. Keep your chest up."
     
     return " | ".join(screen_text), speak_text

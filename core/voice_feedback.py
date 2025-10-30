@@ -6,7 +6,8 @@ Contains text-to-speech system and general feedback generation logic.
 
 import threading
 import queue
-import pyttsx3
+import platform
+import subprocess
 
 # ========================================
 # TEXT-TO-SPEECH SYSTEM (Thread-Safe)
@@ -15,9 +16,21 @@ import pyttsx3
 # Create a queue for voice messages (allows non-blocking speech)
 voice_q = queue.Queue()
 
-# Initialize pyttsx3 text-to-speech engine
-engine = pyttsx3.init()
-engine.setProperty("rate", 160)  # Speech rate (words per minute)
+# Detect platform and choose TTS method
+IS_MACOS = platform.system() == "Darwin"
+
+if IS_MACOS:
+    print("✓ Using macOS native 'say' command for speech")
+    engine = None  # Not using pyttsx3 on macOS
+else:
+    # Windows/Linux: Use pyttsx3
+    try:
+        import pyttsx3
+        engine = None  # Will be created in worker thread
+        print("✓ Using pyttsx3 for speech")
+    except ImportError:
+        print("⚠️  pyttsx3 not available, speech disabled")
+        engine = None
 
 def _voice_worker():
     """
@@ -32,17 +45,49 @@ def _voice_worker():
         - Speaking text is slow (blocks for 1-2 seconds)
         - Without threading, video would freeze during speech
         - Thread allows smooth video + concurrent speech
+    
+    MACOS FIX:
+        - On macOS, uses subprocess to call native 'say' command
+        - This avoids pyttsx3 threading issues with NSSpeechSynthesizer
+        - Works reliably without any special setup
     """
+    # For non-macOS, initialize pyttsx3 engine IN this thread
+    local_engine = None
+    if not IS_MACOS:
+        try:
+            import pyttsx3
+            local_engine = pyttsx3.init()
+            local_engine.setProperty("rate", 160)
+        except Exception as e:
+            print(f"⚠️  Could not initialize speech engine: {e}")
+    
     while True:
         text = voice_q.get()  # Wait for a message
         if text is None:      # None = shutdown signal
             break
-        engine.say(text)      # Synthesize speech
-        engine.runAndWait()   # Play audio (blocking in this thread only)
-        voice_q.task_done()   # Mark task as complete
+        
+        try:
+            # DEBUG: Print what we're trying to say
+            print(f"🔊 TTS: {text}")
+            
+            if IS_MACOS:
+                # macOS: Use native 'say' command via subprocess
+                subprocess.run(['say', text], check=False, timeout=10)
+            elif local_engine:
+                # Windows/Linux: Use pyttsx3
+                local_engine.say(text)
+                local_engine.runAndWait()
+            else:
+                # Fallback: just print
+                print(f"   [VOICE DISABLED - would say: {text}]")
+        except Exception as e:
+            print(f"⚠️  Speech error: {e}")
+        finally:
+            voice_q.task_done()
 
 # Start the voice worker thread (daemon = auto-closes when main program exits)
-threading.Thread(target=_voice_worker, daemon=True).start()
+voice_thread = threading.Thread(target=_voice_worker, daemon=True)
+voice_thread.start()
 
 def speak(text):
     """
@@ -60,6 +105,10 @@ def speak(text):
 def stop_voice():
     """Stop the voice worker thread."""
     voice_q.put(None)
+    try:
+        voice_thread.join(timeout=2.0)
+    except:
+        pass
 
 # ========================================
 # GENERAL FEEDBACK GENERATION
