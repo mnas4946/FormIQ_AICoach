@@ -77,7 +77,7 @@ MIN_VISIBLE_KEYPOINTS = 12     # Minimum keypoints needed to proceed with analys
 SEQUENCE_LENGTH = 30           # Buffer length for temporal features (30 frames ≈ 1 second at 30 fps)
 
 # Feedback settings
-FEEDBACK_COOLDOWN = 5.0        # Seconds between vocal feedback messages (prevents spam)
+FEEDBACK_COOLDOWN = 2.0        # Seconds between vocal feedback messages (prevents spam)
 
 # ========================================
 # LOAD POSE DETECTION MODEL
@@ -355,15 +355,11 @@ def main():
         # Handle rep completion
         if squat_rep:
             rep_counts["Squat"] += 1
-            print(f"\n✅ SQUAT REP #{rep_counts['Squat']} COMPLETED!")
-            print(f"   Calling speak() now...")
             speak("Nice squat. Rep counted.")
             last_spoken_time = time.time()
         
         if arm_rep:
             rep_counts["Arm Circle"] += 1
-            print(f"\n✅ ARM CIRCLE REP #{rep_counts['Arm Circle']} COMPLETED!")
-            print(f"   Calling speak() now...")
             speak("Nice circle. Rep counted.")
             last_spoken_time = time.time()
     
