@@ -28,7 +28,20 @@ const feedbackMessages = [
     "Perfect! Maintain that posture."
 ];
 
+// Stage 1 (Arm Circles) specific feedback
+const stage1FeedbackMessages = {
+    initial: "Please get both arms in the frame",
+    rotating: [
+        "Good form, remember to breathe steadily",
+        "Excellent, maintain the form for 30 seconds",
+        "Try to push your shoulder upwards",
+        "Keep your arm straight"
+    ]
+};
+
 let feedbackIndex = 0;
+let feedbackTimer = null;
+let exerciseStartTime = null;
 
 // Start exercise / camera
 function startExercise() {
@@ -152,6 +165,9 @@ function togglePause() {
     
     if (pauseBtn) {
         if (isPaused) {
+            // Stop feedback timer when paused
+            stopFeedbackTimer();
+            
             pauseBtn.innerHTML = `
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 3L19 12L5 21V3Z" fill="currentColor"/>
@@ -159,6 +175,14 @@ function togglePause() {
                 Resume
             `;
         } else {
+            // Resume feedback timer
+            const stage = getExerciseStage();
+            if (stage === 'stage1') {
+                startStage1Feedback();
+            } else if (stage === 'stage4') {
+                startStage4Feedback();
+            }
+            
             pauseBtn.innerHTML = `
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10 4H6V20H10V4Z" fill="currentColor"/>
@@ -177,6 +201,25 @@ function restartExercise() {
     isExerciseActive = false;
     isPaused = false;
     
+    // Stop feedback timer
+    stopFeedbackTimer();
+    
+    // Stop camera and pose detection
+    if (videoElement && videoElement.srcObject) {
+        videoElement.srcObject.getTracks().forEach(track => track.stop());
+    }
+    if (camera) {
+        camera.stop();
+    }
+    if (videoElement) videoElement.remove();
+    if (canvasElement) canvasElement.remove();
+    
+    videoElement = null;
+    canvasElement = null;
+    canvasCtx = null;
+    pose = null;
+    camera = null;
+    
     updateRepDisplay();
     updateProgress();
     
@@ -193,6 +236,12 @@ function restartExercise() {
         overlay.classList.remove('active');
     }
     
+    // Hide feedback overlay
+    const feedbackOverlay = document.getElementById('feedbackOverlay');
+    if (feedbackOverlay) {
+        feedbackOverlay.style.display = 'none';
+    }
+    
     // Show placeholder again
     const placeholder = document.querySelector('.camera-placeholder');
     if (placeholder) {
@@ -207,6 +256,9 @@ function showCompletion() {
         overlay.classList.add('active');
     }
     isExerciseActive = false;
+    
+    // Stop feedback timer when exercise completes
+    stopFeedbackTimer();
 }
 
 // Cancel session and return to dashboard
@@ -259,25 +311,293 @@ function togglePanel() {
     }
 }
 
-// Start camera (demo function)
-function startCamera() {
+// ===== WEBCAM & POSE DETECTION =====
+
+let videoElement = null;
+let canvasElement = null;
+let canvasCtx = null;
+let pose = null;
+let camera = null;
+
+// Detect which exercise stage we're on
+function getExerciseStage() {
+    const title = document.title.toLowerCase();
+    if (title.includes('stage 1')) {
+        return 'stage1';
+    } else if (title.includes('stage 4')) {
+        return 'stage4';
+    }
+    return 'unknown';
+}
+
+// Stage 1 specific feedback loop
+function startStage1Feedback() {
+    const feedbackText = document.getElementById('feedbackText');
+    if (!feedbackText) return;
+    
+    exerciseStartTime = Date.now();
+    let rotatingIndex = 0;
+    
+    // Show initial message for 30 seconds
+    feedbackText.textContent = stage1FeedbackMessages.initial;
+    
+    // After 30 seconds, start rotating messages every 10 seconds
+    feedbackTimer = setTimeout(() => {
+        // Function to rotate through messages
+        const rotateMessages = () => {
+            feedbackText.textContent = stage1FeedbackMessages.rotating[rotatingIndex];
+            rotatingIndex = (rotatingIndex + 1) % stage1FeedbackMessages.rotating.length;
+        };
+        
+        // Show first rotating message immediately
+        rotateMessages();
+        
+        // Then continue every 10 seconds
+        feedbackTimer = setInterval(rotateMessages, 10000);
+    }, 30000); // Wait 30 seconds before starting rotation
+}
+
+// Stage 4 feedback loop (original behavior)
+function startStage4Feedback() {
+    const feedbackText = document.getElementById('feedbackText');
+    if (!feedbackText) return;
+    
+    exerciseStartTime = Date.now();
+    feedbackIndex = 0;
+    
+    // Show first message
+    feedbackText.textContent = feedbackMessages[feedbackIndex];
+    
+    // Rotate every 3 seconds
+    feedbackTimer = setInterval(() => {
+        feedbackIndex = (feedbackIndex + 1) % feedbackMessages.length;
+        feedbackText.textContent = feedbackMessages[feedbackIndex];
+    }, 3000);
+}
+
+// Stop feedback timer
+function stopFeedbackTimer() {
+    if (feedbackTimer) {
+        clearTimeout(feedbackTimer);
+        clearInterval(feedbackTimer);
+        feedbackTimer = null;
+    }
+    exerciseStartTime = null;
+}
+
+// Start camera with real webcam and pose detection
+async function startCamera() {
     const placeholder = document.querySelector('.camera-placeholder');
+    const cameraView = document.querySelector('.camera-view-new');
     const feedbackOverlay = document.getElementById('feedbackOverlay');
     
-    if (placeholder) {
+    if (!placeholder || !cameraView) return;
+    
+    // Hide placeholder
+    placeholder.style.display = 'none';
+    
+    // Create video element for webcam
+    videoElement = document.createElement('video');
+    videoElement.style.position = 'absolute';
+    videoElement.style.width = '100%';
+    videoElement.style.height = '100%';
+    videoElement.style.objectFit = 'cover';
+    videoElement.autoplay = true;
+    videoElement.playsInline = true;
+    
+    // Create canvas for drawing keypoints
+    canvasElement = document.createElement('canvas');
+    canvasElement.style.position = 'absolute';
+    canvasElement.style.width = '100%';
+    canvasElement.style.height = '100%';
+    canvasElement.style.top = '0';
+    canvasElement.style.left = '0';
+    canvasElement.style.zIndex = '10';
+    
+    // Add elements to camera view
+    cameraView.appendChild(videoElement);
+    cameraView.appendChild(canvasElement);
+    
+    canvasCtx = canvasElement.getContext('2d');
+    
+    try {
+        // Request webcam access
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false
+        });
+        
+        videoElement.srcObject = stream;
+        
+        // Wait for video metadata to load
+        await new Promise((resolve) => {
+            videoElement.onloadedmetadata = () => {
+                videoElement.play();
+                resolve();
+            };
+        });
+        
+        // Set canvas size to match video
+        canvasElement.width = videoElement.videoWidth;
+        canvasElement.height = videoElement.videoHeight;
+        
+        // Show feedback overlay with initial message
+        if (feedbackOverlay) {
+            feedbackOverlay.style.display = 'block';
+            feedbackOverlay.style.opacity = '1';
+            feedbackOverlay.style.zIndex = '100';
+        }
+        
+        // Start stage-specific feedback
+        const stage = getExerciseStage();
+        if (stage === 'stage1') {
+            startStage1Feedback();
+        } else if (stage === 'stage4') {
+            startStage4Feedback();
+        } else {
+            // Fallback for unknown stages
+            const feedbackText = document.getElementById('feedbackText');
+            if (feedbackText) {
+                feedbackText.textContent = feedbackMessages[0];
+            }
+        }
+        
+        // Initialize MediaPipe Pose
+        if (typeof Pose !== 'undefined') {
+            initializePoseDetection();
+        } else {
+            console.log('MediaPipe Pose not loaded, showing camera only');
+        }
+        
+        // Start demo rep counting
+        isExerciseActive = true;
+        simulateDemoExercise();
+        
+    } catch (error) {
+        console.error('Error accessing webcam:', error);
+        placeholder.style.display = 'flex';
         placeholder.innerHTML = `
-            <p class="camera-text" style="color: #10B981;">✓ Camera Active (Demo Mode)</p>
-            <p class="camera-text" style="font-size: 14px;">In real app, webcam feed would appear here</p>
+            <p class="camera-text" style="color: #EF4444;">Camera access denied or unavailable</p>
+            <p class="camera-text" style="font-size: 14px;">Please allow camera permissions and try again</p>
+            <button class="start-camera-btn" onclick="startCamera()">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 4L15 10L6 16V4Z" fill="currentColor"/>
+                </svg>
+                Retry
+            </button>
         `;
     }
-    
-    if (feedbackOverlay) {
-        feedbackOverlay.style.display = 'block';
+}
+
+// Initialize MediaPipe Pose Detection
+function initializePoseDetection() {
+    if (typeof Pose === 'undefined') {
+        console.log('MediaPipe Pose library not available');
+        return;
     }
     
-    // Start demo rep counting
-    isExerciseActive = true;
-    simulateDemoExercise();
+    pose = new Pose({
+        locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+        }
+    });
+    
+    pose.setOptions({
+        modelComplexity: 1,
+        smoothLandmarks: true,
+        enableSegmentation: false,
+        smoothSegmentation: false,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+    });
+    
+    pose.onResults(onPoseResults);
+    
+    // Start processing video frames
+    if (videoElement) {
+        camera = new Camera(videoElement, {
+            onFrame: async () => {
+                if (pose && videoElement) {
+                    await pose.send({ image: videoElement });
+                }
+            },
+            width: 1280,
+            height: 720
+        });
+        camera.start();
+    }
+}
+
+// Handle pose detection results
+function onPoseResults(results) {
+    if (!canvasElement || !canvasCtx) return;
+    
+    // Clear canvas
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    
+    // Draw pose landmarks if detected
+    if (results.poseLandmarks) {
+        drawPoseLandmarks(results.poseLandmarks);
+    }
+    
+    canvasCtx.restore();
+}
+
+// Draw pose keypoints and connections (matching realtime_detection.py style)
+function drawPoseLandmarks(landmarks) {
+    if (!canvasCtx || !landmarks) return;
+    
+    const width = canvasElement.width;
+    const height = canvasElement.height;
+    
+    // Define connections (same as COCO format used in YOLOv8)
+    const connections = [
+        [0, 1], [0, 2], [1, 3], [2, 4],  // Face
+        [5, 6],  // Shoulders
+        [5, 7], [7, 9],  // Left arm
+        [6, 8], [8, 10],  // Right arm
+        [5, 11], [6, 12],  // Torso
+        [11, 12],  // Hips
+        [11, 13], [13, 15],  // Left leg
+        [12, 14], [14, 16]   // Right leg
+    ];
+    
+    // Draw connections (bones)
+    canvasCtx.strokeStyle = '#00FF00';
+    canvasCtx.lineWidth = 3;
+    
+    connections.forEach(([startIdx, endIdx]) => {
+        const start = landmarks[startIdx];
+        const end = landmarks[endIdx];
+        
+        if (start && end && start.visibility > 0.5 && end.visibility > 0.5) {
+            canvasCtx.beginPath();
+            canvasCtx.moveTo(start.x * width, start.y * height);
+            canvasCtx.lineTo(end.x * width, end.y * height);
+            canvasCtx.stroke();
+        }
+    });
+    
+    // Draw keypoints (circles)
+    landmarks.forEach((landmark, index) => {
+        if (landmark && landmark.visibility > 0.5) {
+            const x = landmark.x * width;
+            const y = landmark.y * height;
+            
+            // Draw keypoint circle
+            canvasCtx.beginPath();
+            canvasCtx.arc(x, y, 5, 0, 2 * Math.PI);
+            canvasCtx.fillStyle = '#00FF00';
+            canvasCtx.fill();
+            canvasCtx.strokeStyle = '#FFFFFF';
+            canvasCtx.lineWidth = 1;
+            canvasCtx.stroke();
+        }
+    });
 }
 
 // Simulate exercise for demo (no backend)
@@ -297,7 +617,7 @@ function simulateDemoExercise() {
         currentReps++;
         updateFloatingReps();
         updateProgressRing();
-        rotateFeedback();
+        // Note: Feedback is now handled by stage-specific timers
         
     }, 3000);
 }

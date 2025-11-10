@@ -4,7 +4,7 @@ An AI-powered web application for physiotherapy rehabilitation with real-time po
 
 ## ✨ Features
 
-- **Real-Time Pose Detection**: Powered by YOLOv8 for accurate body landmark tracking
+- **Real-Time Pose Detection**: Powered by YOLOv8 (Python backend) and MediaPipe Pose (Browser frontend)
 - **Automatic Rep Counting**: Intelligent detection of exercise phases (up/down) with automatic counting
 - **Form Feedback**: Real-time analysis and feedback on:
   - Joint angles (knees, elbows, shoulders)
@@ -14,8 +14,10 @@ An AI-powered web application for physiotherapy rehabilitation with real-time po
   - Squats (Stage 4) with depth and form analysis
   - Arm Circles (Stage 1) with height and straightness tracking
 - **Interactive Web Interface**: User-friendly frontend with live video feed and metrics
+- **Browser-Based Pose Tracking**: Visual skeleton overlay with keypoint detection (no backend required)
 - **Real-Time Communication**: WebSocket integration for seamless data streaming
 - **Visual Feedback**: Color-coded indicators (green/yellow/red) for form quality
+- **Smooth Animations**: Enhanced feedback overlay with 50% slower, smoother transitions
 - **Calibration System**: Personalized baseline measurements for accurate feedback
 
 ## Installation
@@ -100,8 +102,9 @@ Open `frontend_disconnected/index.html` in your web browser to access the user i
 
 ## Architecture
 
-The application follows a client-server architecture with real-time communication:
+The application supports two modes:
 
+### Mode 1: Full Stack (Python Backend + Frontend)
 ```
 Frontend (HTML/JS) <--[WebSocket]--> Backend (Python/Flask) <--> YOLOv8 <--> Webcam
 ```
@@ -112,6 +115,21 @@ Frontend (HTML/JS) <--[WebSocket]--> Backend (Python/Flask) <--> YOLOv8 <--> Web
 3. Exercise modules analyze keypoints for form and reps
 4. Results stream to frontend via WebSocket
 5. Frontend displays feedback and metrics in real-time
+
+### Mode 2: Standalone Frontend (Browser-Only) ⭐ NEW
+```
+Frontend (HTML/JS) <--> MediaPipe Pose <--> Browser Webcam API
+```
+
+**Features:**
+- No Python backend required
+- Real-time pose detection directly in browser using MediaPipe
+- Visual keypoint tracking (green skeleton overlay)
+- Smooth feedback animations (50% slower transitions)
+- Works on any device with a webcam and modern browser
+
+**To Use Standalone Mode:**
+Simply open `exercise_stage1.html` or `exercise_stage4.html` directly in your browser and click "Start Camera"
 
 ## Project Structure
 
@@ -131,12 +149,13 @@ Kinda_works_aiphysio/
 ├── frontend_disconnected/
 │   ├── index.html                   # Landing page
 │   ├── exercise.html                # Exercise selection page
-│   ├── exercise_stage1.html         # Arm circles interface
-│   ├── exercise_stage4.html         # Squats interface
-│   ├── script.js                    # Frontend logic
-│   └── style.css                    # Styling
+│   ├── exercise_stage1.html         # Arm circles interface (with pose tracking)
+│   ├── exercise_stage4.html         # Squats interface (with pose tracking)
+│   ├── script.js                    # Frontend logic + pose detection
+│   └── style.css                    # Styling (with smooth animations)
 ├── models/
 │   └── yolov8n-pose.pt             # YOLOv8 pose detection model
+├── CAMERA_FEATURE_GUIDE.md          # New! Guide for webcam & pose features
 └── README.md
 ```
 
@@ -149,10 +168,11 @@ Kinda_works_aiphysio/
 
 ## Acknowledgments
 
-- **YOLOv8** by Ultralytics
-- **Flask** framework
-- **Socket.IO** for real-time communication
-- **OpenCV** for computer vision
+- **YOLOv8** by Ultralytics - Python backend pose detection
+- **MediaPipe Pose** by Google - Browser-based pose detection
+- **Flask** framework - Web server
+- **Socket.IO** - Real-time communication
+- **OpenCV** - Computer vision
 
 ---
 
