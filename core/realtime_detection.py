@@ -6,14 +6,10 @@ from collections import deque
 from ultralytics import YOLO
 
 # Import exercise-specific modules
-try:
-    # Try relative imports first (when imported as a module)
-    from .exercises.squat import SquatState, SquatReferenceChecker, generate_squat_feedback
-    from .exercises.arm_circle_stage_1 import ArmCircleState, generate_arm_circle_feedback
-except ImportError:
-    # Fall back to absolute imports (when run as a script)
-    from exercises.squat import SquatState, SquatReferenceChecker, generate_squat_feedback
-    from exercises.arm_circle_stage_1 import ArmCircleState, generate_arm_circle_feedback
+from exercises.squat import SquatState, SquatReferenceChecker, generate_squat_feedback
+from exercises.arm_circle_stage_1 import ArmCircleState, generate_arm_circle_feedback
+
+# Import arm circle for level 1
 
 # ========================================
 # CONFIGURATION PARAMETERS
@@ -114,35 +110,19 @@ def smooth_kp(prev, new, alpha=SMOOTH_ALPHA):
     return alpha * new + (1 - alpha) * prev
 
 
-# Add method to get current session from user input or web parameter
-def current_session(exercise_type=None, webpage=None):
+# Add method to get current session from user input
+def current_session():
     """
-    Get exercise type based on webpage or user input.
-    
-    PARAMETERS:
-        exercise_type: Optional direct specification ("Squat", "Arm Circle", "Both")
-        webpage: Optional webpage identifier ("exercise_stage1.html", "exercise_stage4.html")
+    Prompt user to select exercise type.
     
     RETURNS:
         String: "Squat", "Arm Circle", or "Both"
     """
-    # If exercise type is directly specified, return it
-    if exercise_type:
-        return exercise_type
-    
-    # If webpage is specified, determine exercise from page
-    if webpage:
-        if "stage1" in webpage.lower():
-            return "Arm Circle"
-        elif "stage4" in webpage.lower():
-            return "Squat"
-    
-    # Otherwise, prompt user for selection
     print("\n" + "="*60)
     print("SELECT EXERCISE")
     print("="*60)
-    print("1. Squat (Stage 4)")
-    print("2. Arm Circle (Stage 1 - Initial Recovery)")
+    print("1. Squat")
+    print("2. Arm Circle (Stage 1 - Recovery)")
     print("3. Both")
     print("="*60)
     

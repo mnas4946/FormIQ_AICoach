@@ -228,11 +228,3 @@ Kinda_works_aiphysio/
 
 ---
 
-Flask==3.0.0
-flask-socketio==5.3.5
-flask-cors==4.0.0
-opencv-python==4.8.1.78
-numpy==1.24.3
-ultralytics==8.1.0
-python-socketio==5.10.0
-eventlet==0.33.3
