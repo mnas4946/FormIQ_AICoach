@@ -1,135 +1,70 @@
-# 🏥 AI Physio - Intelligent Physiotherapy Coach
+# FormIQ - Intelligent Physiotherapy Coach
 
 An AI-powered web application for physiotherapy rehabilitation with real-time pose detection, automatic rep counting, and form feedback.
 
 ## ✨ Features
 
-- 🎥 **Real-time Pose Detection** - YOLOv8-based skeleton tracking
-- 🔢 **Automatic Rep Counting** - AI counts your reps automatically
-- 💬 **Live Form Feedback** - Real-time guidance on posture and technique
-- 📊 **Progress Tracking** - Session statistics and performance metrics
-- 🎯 **Multi-Exercise Support** - Squats, arm circles, and more
-- 🌐 **Beautiful Web Interface** - Modern, responsive UI
-- 📱 **Camera-Focused Design** - Maximize screen space for exercise
+- **Real-Time Pose Detection**: Powered by YOLOv8 for accurate body landmark tracking
+- **Automatic Rep Counting**: Intelligent detection of exercise phases (up/down) with automatic counting
+- **Form Feedback**: Real-time analysis and feedback on:
+  - Joint angles (knees, elbows, shoulders)
+  - Body alignment and balance
+  - Movement quality indicators
+- **Multiple Exercise Support**:
+  - Squats (Stage 4) with depth and form analysis
+  - Arm Circles (Stage 1) with height and straightness tracking
+- **Interactive Web Interface**: User-friendly frontend with live video feed and metrics
+- **Real-Time Communication**: WebSocket integration for seamless data streaming
+- **Visual Feedback**: Color-coded indicators (green/yellow/red) for form quality
+- **Calibration System**: Personalized baseline measurements for accurate feedback
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
-- **Python 3.8 - 3.13** (Python 3.10-3.12 recommended)
-- **pip** (Python package manager)
-- **Webcam** (built-in or external)
-- **Modern browser** (Chrome, Firefox, Safari, Edge)
+- Python 3.8 or higher
+- Webcam/Camera access
+- Modern web browser (Chrome, Firefox, Safari, or Edge)
 
-### Step 1: Navigate to Project Directory
+### Installation Steps
 
+1. **Clone the repository**
 ```bash
-cd "DECO3000 AI Project"
+git clone <repository-url>
 cd Kinda_works_aiphysio
 ```
 
-### Step 2: Create Virtual Environment (Recommended)
-
+2. **Install Python dependencies**
 ```bash
-# Create virtual environment
-python3 -m venv .venv
-
-# Activate it
-# On macOS/Linux:
-source .venv/bin/activate
-
-# On Windows:
-# .venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-### Step 3: Install Python Dependencies
+Required packages:
+- `ultralytics` - YOLOv8 pose detection model
+- `opencv-python` - Computer vision and camera handling
+- `flask` - Web framework
+- `flask-socketio` - Real-time WebSocket communication
+- `numpy` - Numerical computations
 
+3. **Verify model files**
+Ensure `yolov8n-pose.pt` is present in the `models/` directory.
+
+### Running the Application
+
+1. **Start the AI detection backend**
 ```bash
-cd website/backend
-
-# For Python 3.13 users, upgrade pip first:
-pip3 install --upgrade pip setuptools wheel
-
-# Install all dependencies:
-pip3 install -r requirements.txt
+python core/realtime_detection.py
 ```
-
-**Dependencies installed:**
-- `Flask==3.0.0` - Web framework
-- `flask-socketio==5.3.5` - Real-time WebSocket communication
-- `flask-cors==4.0.0` - Cross-origin resource sharing
-- `python-socketio==5.10.0` - Socket.IO support
-- `opencv-python==4.10.0.84` - Computer vision & camera access
-- `numpy>=1.26.0` - Numerical operations (Python 3.13 compatible!)
-- `ultralytics>=8.3.0` - YOLOv8 pose detection model
-
-### Step 4: Verify Model File
-
-The YOLOv8 pose detection model should be in `models/yolov8n-pose.pt`:
-
-```bash
-# Check if model exists
-ls ../../models/yolov8n-pose.pt
-
-# Should output: ../../models/yolov8n-pose.pt
-```
-
-If model is missing, it should already be in your project folder.
-
-## 🎮 How to Run
-
-### Option 1: Web Application (Recommended)
-
-**1. Start the Flask Backend Server:**
-
-```bash
-cd website/backend
-python3 server.py
-```
-
-Or if python3 doesn't work:
-```bash
-python server.py
-```
-
-You should see:
-```
-============================================================
-🚀 AI PHYSIO BACKEND SERVER
-============================================================
-Frontend: http://localhost:5000
-Stage 1:  http://localhost:5000/exercise_stage1.html
-Stage 4:  http://localhost:5000/exercise_stage4.html
-============================================================
-```
-
-**2. Open Your Browser:**
-
-Navigate to: **http://localhost:5000**
-
-**3. Use the Application:**
-
-- Click "Start Today's Rehabilitation" → Stage 4 (Squats)
-- OR scroll down and click "Stage 1" → Arm Circles (Recovery)
-- Click **"Start Camera"** button
-- **Allow camera access** when prompted
-- Start exercising! The AI will count reps and give feedback
-
-### Option 2: Standalone Python Script (Alternative)
-
-For command-line testing without the web interface:
-
-```bash
-cd core
-python realtime_detection.py
-```
-
 This opens an OpenCV window with pose detection. Use keyboard controls:
 - **'q'** - Quit
 - **'p'** - Pause/Resume
 - **'c'** - Calibrate
 
-## 🎯 Usage Guide
+2. **Open the frontend**
+Open `frontend_disconnected/index.html` in your web browser to access the user interface.
+
+
+## Usage Guide
 
 ### For Squats (Stage 4)
 
@@ -163,63 +98,56 @@ This opens an OpenCV window with pose detection. Use keyboard controls:
 - Rep = Complete down → up cycle
 
 
-## 🏗️ Architecture
+## Architecture
+
+The application follows a client-server architecture with real-time communication:
 
 ```
-┌─────────────────────────────────────────────────────┐
-│  Frontend (HTML/CSS/JavaScript)                     │
-│  - Beautiful web interface                          │
-│  - WebSocket client for real-time communication     │
-│  - Webcam capture & pose visualization              │
-└─────────────────────────────────────────────────────┘
-                        ⬇️ WebSocket
-┌─────────────────────────────────────────────────────┐
-│  Backend (Flask + Socket.IO)                        │
-│  - REST API endpoints                               │
-│  - WebSocket server                                 │
-│  - Session management                               │
-└─────────────────────────────────────────────────────┘
-                        ⬇️
-┌─────────────────────────────────────────────────────┐
-│  AI Detection (YOLOv8 + Exercise Modules)           │
-│  - Real-time pose estimation                        │
-│  - Angle calculations                               │
-│  - Rep counting logic                               │
-│  - Form analysis & feedback                         │
-└─────────────────────────────────────────────────────┘
+Frontend (HTML/JS) <--[WebSocket]--> Backend (Python/Flask) <--> YOLOv8 <--> Webcam
 ```
 
-## 📁 Project Structure
+**Data Flow:**
+1. Webcam captures video frames
+2. YOLOv8 processes frames for pose keypoints
+3. Exercise modules analyze keypoints for form and reps
+4. Results stream to frontend via WebSocket
+5. Frontend displays feedback and metrics in real-time
+
+## Project Structure
 
 ```
 Kinda_works_aiphysio/
-├── core/                           # AI Detection System
+├── core/
 │   ├── exercises/
-│   │   ├── squat.py               # Squat detection & feedback
-│   │   └── arm_circle_stage_1.py  # Arm circle detection (Stage 1)
-│   └── realtime_detection.py      # Standalone detection (optional)
-│
-├── website/                        # Web Application
-│   ├── backend/
-│   │   ├── server.py              # Flask backend server ⭐
-│   │   └── requirements.txt       # Python dependencies
-│   │
-│   └── frontend/
-│       ├── index.html             # Dashboard
-│       ├── exercise_stage1.html   # Stage 1 (Arm Circles)
-│       ├── exercise_stage4.html   # Stage 4 (Squats)
-│       ├── style.css              # All styles
-│       ├── script.js              # UI functions
-│       └── camera-client.js       # WebSocket client
-│
+│   │   ├── arm_circle_stage_1.py    # Arm circle exercise logic
+│   │   └── squat.py                  # Squat exercise logic
+│   └── realtime_detection.py         # Main pose detection engine
+├── data/
+│   ├── reference/                    # Reference pose data
+│   │   ├── squat_down.json          # Squat down position keypoints
+│   │   └── squat_up.json            # Squat up position keypoints
+│   ├── squat_pictures/              # Visual references
+│   └── extract_squat.py             # Data extraction utility
+├── frontend_disconnected/
+│   ├── index.html                   # Landing page
+│   ├── exercise.html                # Exercise selection page
+│   ├── exercise_stage1.html         # Arm circles interface
+│   ├── exercise_stage4.html         # Squats interface
+│   ├── script.js                    # Frontend logic
+│   └── style.css                    # Styling
 ├── models/
-│   └── yolov8n-pose.pt            # YOLOv8 pose detection model
-│
-└── data/
-    └── reference/                  # Reference poses for form checking
+│   └── yolov8n-pose.pt             # YOLOv8 pose detection model
+└── README.md
 ```
 
-## 🙏 Acknowledgments
+**Key Components:**
+- `core/realtime_detection.py`: Main entry point, handles camera and pose detection
+- `core/exercises/`: Exercise-specific form analysis and rep counting logic
+- `frontend_disconnected/`: Web interface for user interaction
+- `data/reference/`: Calibration data and reference poses
+- `models/`: Pre-trained YOLOv8 pose estimation model
+
+## Acknowledgments
 
 - **YOLOv8** by Ultralytics
 - **Flask** framework
