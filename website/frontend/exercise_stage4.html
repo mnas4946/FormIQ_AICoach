@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>formIQ - Stage 1 Exercise</title>
-    <link rel="stylesheet" href="style.css">
+    <title>formIQ - Stage 4 Exercise</title>
+    <link rel="stylesheet" href="/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="script.js"></script>
+    <!-- Socket.IO for real-time backend communication -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/script.js"></script>
 </head>
 <body class="exercise-body">
     <!-- Exercise Header (Fixed) -->
     <header class="exercise-header-new">
         <div class="exercise-title-section">
-            <span class="stage-tag">Stage 1 - Initial Recovery</span>
-            <h1>Arm Circles</h1>
-            <p class="exercise-purpose">Gentle range of motion for shoulder rehabilitation</p>
+            <span class="stage-tag stage-4">Stage 4 - Near Normal Function</span>
+            <h1>Squats</h1>
+            <p class="exercise-purpose">Strengthen quadriceps and improve knee stability</p>
         </div>
         <div class="header-actions">
             <!-- Floating Rep Counter (Always Visible) -->
@@ -68,7 +70,7 @@
                                 <path d="M10 6V10L13 11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                        <p class="feedback-text" id="feedbackText">Keep your arms straight and raise to shoulder level</p>
+                        <p class="feedback-text" id="feedbackText">Keep your back straight and lower yourself slowly</p>
                     </div>
                 </div>
             </div>
@@ -119,7 +121,7 @@
                 <!-- Current Exercise Info -->
                 <div class="panel-card">
                     <h3 class="panel-card-title">Current Exercise</h3>
-                    <p class="panel-card-value">Arm Circles</p>
+                    <p class="panel-card-value">Squats</p>
                     <div class="panel-divider"></div>
                     <div class="panel-detail">
                         <span class="detail-label">Target</span>
@@ -137,11 +139,11 @@
                     <div class="form-status" id="formStatus">
                         <div class="form-indicator good">
                             <div class="indicator-dot"></div>
-                            <span>Arm straightness: Good</span>
+                            <span>Knee depth: Good</span>
                         </div>
                         <div class="form-indicator good">
                             <div class="indicator-dot"></div>
-                            <span>Height: Perfect</span>
+                            <span>Torso: Straight</span>
                         </div>
                         <div class="form-indicator good">
                             <div class="indicator-dot"></div>
@@ -158,8 +160,8 @@
                         </svg>
                         <h3 class="panel-card-title">Up Next</h3>
                     </div>
-                    <p class="next-exercise-name">Shoulder Rolls</p>
-                    <p class="next-exercise-details">8 reps × 2 sets</p>
+                    <p class="next-exercise-name">Push-ups</p>
+                    <p class="next-exercise-details">12 reps × 2 sets</p>
                 </div>
             </div>
         </aside>
@@ -174,8 +176,8 @@
                     <path d="M25 40L35 50L55 30" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <h2 class="completion-title">Excellent Work! 🎉</h2>
-            <p class="completion-subtitle">Stage 1 exercise completed successfully</p>
+            <h2 class="completion-title">Great Progress, Maria! 🎉</h2>
+            <p class="completion-subtitle">You've completed your rehabilitation session</p>
             
             <div class="completion-stats">
                 <div class="completion-stat">
@@ -183,17 +185,17 @@
                     <p class="stat-label">Reps</p>
                 </div>
                 <div class="completion-stat">
-                    <p class="stat-number" id="finalAccuracy">92%</p>
+                    <p class="stat-number" id="finalAccuracy">85%</p>
                     <p class="stat-label">Form</p>
                 </div>
                 <div class="completion-stat">
-                    <p class="stat-number" id="finalDuration">4:35</p>
+                    <p class="stat-number" id="finalDuration">5:23</p>
                     <p class="stat-label">Time</p>
                 </div>
             </div>
 
             <div class="completion-actions">
-                <button class="btn-secondary" onclick="window.location.href='index.html'">Back to Dashboard</button>
+                <button class="btn-secondary" onclick="window.location.href='/'">Back to Dashboard</button>
                 <button class="btn-primary" onclick="nextExercise()">Next Exercise</button>
             </div>
         </div>
