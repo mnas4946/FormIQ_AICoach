@@ -1,18 +1,3 @@
-"""
-REAL-TIME EXERCISE DETECTION AND COACHING
-==========================================
-Entry point for the AI Coach system.
-
-WHAT THIS DOES:
-    1. User selects exercise
-    2. Loads pose detection model
-    3. Starts camera
-    4. Runs real-time detection and feedback loop
-
-USAGE:
-    python realtime_detection.py
-"""
-
 import cv2
 import numpy as np
 import time
@@ -21,43 +6,10 @@ from collections import deque
 from ultralytics import YOLO
 
 # Import exercise-specific modules
-from squat import SquatState, SquatReferenceChecker
-from arm_circle import ArmCircleState
-from voice_feedback import speak, stop_voice, feedback_generator
+from exercises.squat import SquatState, SquatReferenceChecker, generate_squat_feedback
+from exercises.arm_circle_stage_1 import ArmCircleState, generate_arm_circle_feedback
 
-# ========================================
-# USER EXERCISE SELECTION
-# ========================================
-
-def select_exercise():
-    """
-    Allow user to select which exercise to perform.
-    
-    RETURNS:
-        String: 'Squat' or 'Arm Circle'
-    """
-    print("\n" + "="*60)
-    print("AI COACH - EXERCISE SELECTION")
-    print("="*60)
-    print("\nAvailable exercises:")
-    print("  [1] Squat")
-    print("  [2] Arm Circle")
-    print("  [3] Both (track both simultaneously)")
-    
-    while True:
-        choice = input("\nSelect exercise (1/2/3): ").strip()
-        
-        if choice == '1':
-            print("\n✓ Selected: SQUAT")
-            return "Squat"
-        elif choice == '2':
-            print("\n✓ Selected: ARM CIRCLE")
-            return "Arm Circle"
-        elif choice == '3':
-            print("\n✓ Selected: BOTH")
-            return "Both"
-        else:
-            print("Invalid choice. Please enter 1, 2, or 3.")
+# Import arm circle for level 1
 
 # ========================================
 # CONFIGURATION PARAMETERS
@@ -89,11 +41,16 @@ FEEDBACK_COOLDOWN = 2.0        # Seconds between vocal feedback messages (preven
 #   7-8: elbows, 9-10: wrists, 11-12: hips,
 #   13-14: knees, 15-16: ankles
 
-# Use existing model file instead of downloading every time
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "yolov8n-pose.pt")
+# Use existing model from ./models/yolov8n-pose.pt
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "yolov8n-pose.pt")
 if not os.path.exists(MODEL_PATH):
-    # Fallback to parent directory
-    MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "yolov8n-pose.pt")
+    # Fallback to other common locations
+    alt_path = os.path.join(os.path.dirname(__file__), "yolov8n-pose.pt")
+    if os.path.exists(alt_path):
+        MODEL_PATH = alt_path
+    else:
+        print(f"⚠️  Model not found at {MODEL_PATH}")
+        print(f"   Please ensure yolov8n-pose.pt is in the models/ directory")
 
 print(f"✓ Loading model from: {MODEL_PATH}")
 yolo = YOLO(MODEL_PATH)  # lightweight pose model
@@ -152,6 +109,35 @@ def smooth_kp(prev, new, alpha=SMOOTH_ALPHA):
         return new
     return alpha * new + (1 - alpha) * prev
 
+
+# Add method to get current session from user input
+def current_session():
+    """
+    Prompt user to select exercise type.
+    
+    RETURNS:
+        String: "Squat", "Arm Circle", or "Both"
+    """
+    print("\n" + "="*60)
+    print("SELECT EXERCISE")
+    print("="*60)
+    print("1. Squat")
+    print("2. Arm Circle (Stage 1 - Recovery)")
+    print("3. Both")
+    print("="*60)
+    
+    while True:
+        choice = input("Enter your choice (1-3): ").strip()
+        
+        if choice == "1":
+            return "Squat"
+        elif choice == "2":
+            return "Arm Circle"
+        elif choice == "3":
+            return "Both"
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
 # ========================================
 # MAIN EXECUTION
 # ========================================
@@ -160,7 +146,7 @@ def main():
     """Main function to run the AI Coach."""
     
     # User selects exercise
-    selected_exercise = select_exercise()
+    selected_exercise = current_session()
     
     # ========================================
     # MAIN REAL-TIME LOOP INITIALIZATION
@@ -196,9 +182,9 @@ def main():
     # Rep counting
     rep_counts = {"Squat": 0, "Arm Circle": 0}
     
-    # Feedback throttling
-    last_spoken_time = 0.0
-    last_spoken_message = ""
+    # # Feedback throttling
+    # last_spoken_time = 0.0
+    # last_spoken_message = ""
     
     # User controls
     print("\n" + "="*60)
@@ -319,6 +305,22 @@ def main():
                 kp_smooth[16,:2]   # right ankle
             )
             
+            # TORSO ANGLES (shoulder to hip - for body straightness in squats)
+            # Calculate angle from average shoulder to average hip
+            left_torso = compute_angle_deg(
+                kp_smooth[5,:2],   # left shoulder
+                kp_smooth[11,:2],  # left hip
+                kp_smooth[13,:2]   # left knee (reference point)
+            )
+            
+            right_torso = compute_angle_deg(
+                kp_smooth[6,:2],   # right shoulder
+                kp_smooth[12,:2],  # right hip
+                kp_smooth[14,:2]   # right knee (reference point)
+            )
+            
+            angles["torso"] = (left_torso + right_torso) / 2.0
+            
             # ELBOW ANGLES (for arm circle feedback)
             angles["left_elbow"] = compute_angle_deg(
                 kp_smooth[5,:2],   # left shoulder
@@ -332,6 +334,21 @@ def main():
                 kp_smooth[10,:2]   # right wrist
             )
             
+            # ARM ANGLES (for arm circle - angle from vertical when arms are raised)
+            # Calculate angle of arm relative to torso/vertical
+            # Using shoulder, elbow, hip as reference points
+            angles["left_arm_angle"] = compute_angle_deg(
+                kp_smooth[11,:2],  # left hip (vertical reference)
+                kp_smooth[5,:2],   # left shoulder
+                kp_smooth[9,:2]    # left wrist
+            )
+            
+            angles["right_arm_angle"] = compute_angle_deg(
+                kp_smooth[12,:2],  # right hip (vertical reference)
+                kp_smooth[6,:2],   # right shoulder
+                kp_smooth[10,:2]   # right wrist
+            )
+            
             # CENTER POINTS (for arm circle rotation tracking)
             shoulder_center = (kp_smooth[5,:2] + kp_smooth[6,:2]) / 2.0
             wrist_center = (kp_smooth[9,:2] + kp_smooth[10,:2]) / 2.0
@@ -341,57 +358,26 @@ def main():
             continue
     
         # STEP 8: UPDATE STATE MACHINES & COUNT REPS
-        avg_knee = (angles["left_knee"] + angles["right_knee"]) / 2.0
-        
         squat_rep = False
         arm_rep = False
         
+        # Update squat state machine
         if squat_state:
+            avg_knee = (angles["left_knee"] + angles["right_knee"]) / 2.0
             squat_rep = squat_state.update(avg_knee)
+            if squat_rep:
+                rep_counts["Squat"] += 1
+                print(f"✓ Squat rep completed! Total: {rep_counts['Squat']}")
         
+        # Update arm circle state machine
         if arm_state:
-            arm_rep = arm_state.update(shoulder_center, wrist_center, wrap_angle_deg)
+            avg_arm_angle = (angles["left_arm_angle"] + angles["right_arm_angle"]) / 2.0
+            arm_rep = arm_state.update(avg_arm_angle)
+            if arm_rep:
+                rep_counts["Arm Circle"] += 1
+                print(f"✓ Arm circle rep completed! Total: {rep_counts['Arm Circle']}")
     
-        # Handle rep completion
-        if squat_rep:
-            rep_counts["Squat"] += 1
-            speak("Nice squat. Rep counted.")
-            last_spoken_time = time.time()
-        
-        if arm_rep:
-            rep_counts["Arm Circle"] += 1
-            speak("Nice circle. Rep counted.")
-            last_spoken_time = time.time()
-    
-        # STEP 9: GENERATE FEEDBACK
-        # Determine which exercise is being performed
-        current_exercise = None
-        
-        if selected_exercise == "Squat":
-            current_exercise = "Squat"
-        elif selected_exercise == "Arm Circle":
-            current_exercise = "Arm Circle"
-        elif selected_exercise == "Both":
-            # Heuristic: if avg knee < 120°, assume squatting
-            if avg_knee < 120:
-                current_exercise = "Squat"
-            elif arm_state and arm_state.cumulative > 0:
-                current_exercise = "Arm Circle"
-        
-        # Generate feedback
-        screen_msg, suggested_speak = feedback_generator(
-            angles, 
-            current_exercise, 
-            last_spoken_time,
-            FEEDBACK_COOLDOWN
-        )
-        
-        # Speak suggested feedback if available and not recently spoken
-        if suggested_speak and (time.time() - last_spoken_time) > FEEDBACK_COOLDOWN:
-            speak(suggested_speak)
-            last_spoken_time = time.time()
-    
-        # STEP 10: RENDER VISUAL OVERLAYS
+        # STEP 9: RENDER VISUAL OVERLAYS
         # Draw keypoints on frame
         for i, (x, y, c) in enumerate(kp_smooth):
             if c > 0.2:
@@ -409,9 +395,30 @@ def main():
                        (20, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,255,0), 2)
             y_pos += 40
         
-        # Display feedback message
-        cv2.putText(frame, f"{screen_msg}", 
-                   (20, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,0), 2)
+        # STEP 10: GENERATE AND DISPLAY FEEDBACK
+        feedback_text = ""
+        
+        # Generate feedback based on selected exercise
+        if selected_exercise == "Squat" and squat_state:
+            feedback_text = generate_squat_feedback(angles, time.time())
+        
+        elif selected_exercise == "Arm Circle" and arm_state:
+            feedback_text = generate_arm_circle_feedback(angles, time.time())
+        
+        elif selected_exercise == "Both":
+            # Show feedback for both exercises (split display)
+            squat_feedback = generate_squat_feedback(angles, time.time()) if squat_state else ""
+            arm_feedback = generate_arm_circle_feedback(angles, time.time()) if arm_state else ""
+            feedback_text = f"SQUAT: {squat_feedback}\nARM: {arm_feedback}"
+        
+        # Display feedback on screen
+        if feedback_text:
+            # Split multi-line feedback
+            feedback_lines = feedback_text.split('\n')
+            for i, line in enumerate(feedback_lines):
+                cv2.putText(frame, line, 
+                           (20, y_pos + (i * 35)), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,200,255), 2)
     
         # Show the frame
         cv2.imshow("AI Coach", frame)
@@ -422,7 +429,6 @@ def main():
     
     cap.release()
     cv2.destroyAllWindows()
-    stop_voice()
     
     print("\n" + "="*60)
     print("AI COACH SESSION ENDED")
