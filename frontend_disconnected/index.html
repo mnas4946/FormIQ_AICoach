@@ -39,7 +39,7 @@
 
         <!-- Start Exercise Card -->
         <section class="exercise-card-section">
-            <div class="exercise-card" onclick="window.location.href='exercise.html'">
+            <div class="exercise-card" onclick="window.location.href='exercise_stage4.html'">
                 <div class="exercise-card-content">
                     <div class="exercise-icon">
                         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -218,6 +218,57 @@
                         </div>
                         <div class="activity-badge success">Completed</div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Previous Stage Exercises Section -->
+        <section class="previous-stages-section" style="margin-top: 40px;">
+            <div class="previous-stages-card">
+                <div class="previous-stages-header">
+                    <div class="previous-stages-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="16" r="16" fill="#F59E0B" fill-opacity="0.1"/>
+                            <path d="M20 12L14 16L20 20" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 12L8 16L14 20" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="previous-stages-text">
+                        <h2>Access Previous Stage Exercises</h2>
+                        <p>Practice exercises from earlier recovery stages</p>
+                    </div>
+                </div>
+                <div class="stage-buttons-grid">
+                    <button class="stage-button active" onclick="window.location.href='exercise_stage1.html'">
+                        <div class="stage-button-content">
+                            <div class="stage-badge">Stage 1</div>
+                            <p class="stage-button-title">Initial Recovery</p>
+                            <p class="stage-button-desc">Basic range of motion exercises</p>
+                        </div>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="stage-button disabled" disabled>
+                        <div class="stage-button-content">
+                            <div class="stage-badge">Stage 2</div>
+                            <p class="stage-button-title">Progressive Loading</p>
+                            <p class="stage-button-desc">Wider range of motion exercises</p>
+                        </div>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 5V10M10 10V15M10 10H15M10 10H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="stage-button disabled" disabled>
+                        <div class="stage-button-content">
+                            <div class="stage-badge">Stage 3</div>
+                            <p class="stage-button-title">Strength Building</p>
+                            <p class="stage-button-desc">Moving weight exercises</p>
+                        </div>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 5V10M10 10V15M10 10H15M10 10H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </section>

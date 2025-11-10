@@ -238,3 +238,97 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// ===== NEW EXERCISE PAGE FUNCTIONS =====
+
+// Toggle tracking panel
+function togglePanel() {
+    const panel = document.getElementById('trackingPanel');
+    const btnText = document.getElementById('panelBtnText');
+    const toggleIcon = document.getElementById('toggleIcon');
+    
+    if (panel) {
+        panel.classList.toggle('hidden');
+        
+        if (panel.classList.contains('hidden')) {
+            btnText.textContent = 'Show Panel';
+            toggleIcon.setAttribute('d', 'M13 10L10 13L7 10M13 6L10 9L7 6');
+        } else {
+            btnText.textContent = 'Hide Panel';
+            toggleIcon.setAttribute('d', 'M7 10L10 7L13 10M7 14L10 11L13 14');
+        }
+    }
+}
+
+// Start camera (demo function)
+function startCamera() {
+    const placeholder = document.querySelector('.camera-placeholder');
+    const feedbackOverlay = document.getElementById('feedbackOverlay');
+    
+    if (placeholder) {
+        placeholder.innerHTML = `
+            <p class="camera-text" style="color: #10B981;">✓ Camera Active (Demo Mode)</p>
+            <p class="camera-text" style="font-size: 14px;">In real app, webcam feed would appear here</p>
+        `;
+    }
+    
+    if (feedbackOverlay) {
+        feedbackOverlay.style.display = 'block';
+    }
+    
+    // Start demo rep counting
+    isExerciseActive = true;
+    simulateDemoExercise();
+}
+
+// Simulate exercise for demo (no backend)
+function simulateDemoExercise() {
+    if (!isExerciseActive || isPaused) return;
+    
+    // Simulate a rep every 3 seconds
+    const interval = setInterval(() => {
+        if (!isExerciseActive || isPaused || currentReps >= targetReps) {
+            clearInterval(interval);
+            if (currentReps >= targetReps) {
+                setTimeout(showCompletion, 1000);
+            }
+            return;
+        }
+        
+        currentReps++;
+        updateFloatingReps();
+        updateProgressRing();
+        rotateFeedback();
+        
+    }, 3000);
+}
+
+// Update floating rep counter
+function updateFloatingReps() {
+    const floatingReps = document.getElementById('floatingReps');
+    if (floatingReps) {
+        floatingReps.textContent = `${currentReps}/${targetReps}`;
+    }
+}
+
+// Update progress ring
+function updateProgressRing() {
+    const progress = (currentReps / targetReps) * 100;
+    const progressPercent = document.getElementById('progressPercent');
+    const progressCircle = document.getElementById('progressCircle');
+    
+    if (progressPercent) {
+        progressPercent.textContent = Math.round(progress);
+    }
+    
+    if (progressCircle) {
+        const circumference = 327; // 2 * π * 52
+        const offset = circumference - (progress / 100) * circumference;
+        progressCircle.style.strokeDashoffset = offset;
+    }
+}
+
+// Next exercise
+function nextExercise() {
+    alert('Next exercise would load here');
+}
+
