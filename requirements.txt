@@ -10,3 +10,4 @@ flask-socketio>=5.3.0   # Real-time WebSocket communication
 # Text-to-Speech
 pyttsx3>=2.90           # Cross-platform text-to-speech library
 
+
