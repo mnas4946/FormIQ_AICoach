@@ -4,6 +4,8 @@ import time
 import os
 from collections import deque
 from ultralytics import YOLO
+import pyttsx3
+import threading
 
 # Import exercise-specific modules
 from exercises.squat import SquatState, SquatReferenceChecker, generate_squat_feedback
@@ -110,6 +112,62 @@ def smooth_kp(prev, new, alpha=SMOOTH_ALPHA):
     return alpha * new + (1 - alpha) * prev
 
 
+# ========================================
+# TEXT-TO-SPEECH MANAGER
+# ========================================
+
+class TTSManager:
+    """
+    Manages text-to-speech with cooldown to prevent speech spam.
+    Runs speech in a separate thread to avoid blocking the main loop.
+    """
+    def __init__(self, cooldown_seconds=5.0):
+        self.cooldown_seconds = cooldown_seconds
+        self.last_speech_time = 0.0
+        self.is_speaking = False
+        self.engine = pyttsx3.init()
+        
+        # Configure TTS properties (optional - adjust to preference)
+        self.engine.setProperty('rate', 150)    # Speed of speech
+        self.engine.setProperty('volume', 0.9)  # Volume (0.0 to 1.0)
+        
+    def speak(self, text):
+        """
+        Speak the given text if cooldown period has passed.
+        
+        PARAMETERS:
+            text: String to speak
+            
+        RETURNS:
+            True if speech was initiated, False if still in cooldown
+        """
+        current_time = time.time()
+        
+        # Check if we're still in cooldown period
+        if self.is_speaking or (current_time - self.last_speech_time) < self.cooldown_seconds:
+            return False
+        
+        # Start speaking in a separate thread
+        self.is_speaking = True
+        self.last_speech_time = current_time
+        
+        def _speak_thread():
+            try:
+                self.engine.say(text)
+                self.engine.runAndWait()
+            except Exception as e:
+                print(f"TTS Error: {e}")
+            finally:
+                # Wait for cooldown after speech completes
+                time.sleep(self.cooldown_seconds)
+                self.is_speaking = False
+        
+        thread = threading.Thread(target=_speak_thread, daemon=True)
+        thread.start()
+        
+        return True
+
+
 # Add method to get current session from user input
 def current_session():
     """
@@ -182,9 +240,8 @@ def main():
     # Rep counting
     rep_counts = {"Squat": 0, "Arm Circle": 0}
     
-    # # Feedback throttling
-    # last_spoken_time = 0.0
-    # last_spoken_message = ""
+    # Initialize Text-to-Speech Manager
+    tts = TTSManager(cooldown_seconds=5.0)
     
     # User controls
     print("\n" + "="*60)
@@ -368,6 +425,8 @@ def main():
             if squat_rep:
                 rep_counts["Squat"] += 1
                 print(f"✓ Squat rep completed! Total: {rep_counts['Squat']}")
+                # Speak "Rep counted" when a rep is completed
+                tts.speak("Rep counted")
         
         # Update arm circle state machine
         if arm_state:
@@ -376,6 +435,8 @@ def main():
             if arm_rep:
                 rep_counts["Arm Circle"] += 1
                 print(f"✓ Arm circle rep completed! Total: {rep_counts['Arm Circle']}")
+                # Speak "Rep counted" when a rep is completed
+                tts.speak("Rep counted")
     
         # STEP 9: RENDER VISUAL OVERLAYS
         # Draw keypoints on frame
@@ -411,7 +472,7 @@ def main():
             arm_feedback = generate_arm_circle_feedback(angles, time.time()) if arm_state else ""
             feedback_text = f"SQUAT: {squat_feedback}\nARM: {arm_feedback}"
         
-        # Display feedback on screen
+        # Display feedback on screen and speak it
         if feedback_text:
             # Split multi-line feedback
             feedback_lines = feedback_text.split('\n')
@@ -419,6 +480,9 @@ def main():
                 cv2.putText(frame, line, 
                            (20, y_pos + (i * 35)), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,200,255), 2)
+            
+            # Speak the feedback text (TTS will handle cooldown)
+            tts.speak(feedback_text)
     
         # Show the frame
         cv2.imshow("AI Coach", frame)

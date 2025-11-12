@@ -6,6 +6,7 @@ An AI-powered web application for physiotherapy rehabilitation with real-time po
 
 - **Real-Time Pose Detection**: Powered by YOLOv8 (Python backend) and MediaPipe Pose (Browser frontend)
 - **Automatic Rep Counting**: Intelligent detection of exercise phases (up/down) with automatic counting
+- **Text-to-Speech Feedback**: Voice guidance that reads feedback and announces rep counts with 5-second cooldown
 - **Form Feedback**: Real-time analysis and feedback on:
   - Joint angles (knees, elbows, shoulders)
   - Body alignment and balance
@@ -47,6 +48,7 @@ Required packages:
 - `flask` - Web framework
 - `flask-socketio` - Real-time WebSocket communication
 - `numpy` - Numerical computations
+- `pyttsx3` - Text-to-speech for voice feedback
 
 3. **Verify model files**
 Ensure `yolov8n-pose.pt` is present in the `models/` directory.
@@ -61,6 +63,12 @@ This opens an OpenCV window with pose detection. Use keyboard controls:
 - **'q'** - Quit
 - **'p'** - Pause/Resume
 - **'c'** - Calibrate
+
+**Voice Feedback:**
+- The system will automatically speak:
+  - "Rep counted" when you complete a repetition
+  - Form feedback messages displayed on screen
+- 5-second cooldown between voice announcements prevents audio spam
 
 2. **Open the frontend**
 Open `frontend_disconnected/index.html` in your web browser to access the user interface.
