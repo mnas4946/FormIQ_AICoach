@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formIQ - Your Progress</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="media/logo.png" alt="formIQ Logo" width="120" height="32" style="object-fit: contain;">
+            </div>
+        </div>
+        <div class="nav-right">
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="feedback.html" class="nav-link active">Your Progress</a>
+            <a href="#" class="nav-link">Messages</a>
+            <a href="#" class="nav-link">Account</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Page Header -->
+        <section class="welcome-section">
+            <h1 class="welcome-title">Your Progress & Feedback</h1>
+            <p class="welcome-subtitle">Track your recovery journey and learn from your sessions</p>
+        </section>
+
+        <!-- Today's Session Summary -->
+        <section class="feedback-section">
+            <div class="feedback-header">
+                <div class="feedback-header-content">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="14" cy="14" r="14" fill="#10B981" fill-opacity="0.1"/>
+                        <path d="M9 14L12 17L19 10" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div>
+                        <h2 class="section-title" style="margin: 0;">Today's Session</h2>
+                        <p style="color: #64748b; font-size: 16px; margin: 4px 0 0 0;">Wednesday, November 12, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Cards Grid -->
+            <div class="session-cards-grid">
+                <!-- Session Card 1: Squats -->
+                <div class="session-feedback-card">
+                    <div class="session-card-header">
+                        <div class="session-info">
+                            <h1>Squats - Stage 4</h1>
+                            <p class="session-time">9:30 AM • 5 min 23 sec</p>
+                        </div>
+                        <div class="session-badge success">Completed</div>
+                    </div>
+
+                    <div class="session-stats">
+                        <div class="mini-stat">
+                            <p class="mini-stat-value">10</p>
+                            <p class="mini-stat-label">Reps</p>
+                        </div>
+                        <div class="mini-stat">
+                            <p class="mini-stat-value">87%</p>
+                            <p class="mini-stat-label">Form</p>
+                        </div>
+                        <div class="mini-stat">
+                            <p class="mini-stat-value">Good</p>
+                            <p class="mini-stat-label">Depth</p>
+                        </div>
+                    </div>
+
+                    <div class="feedback-divider"></div>
+
+                    <!-- Common Mistakes -->
+                    <div class="mistakes-section">
+                        <h4 class="mistakes-title">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="9" cy="9" r="8" stroke="#F59E0B" stroke-width="2"/>
+                                <path d="M9 5V9" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="9" cy="12" r="0.5" fill="#F59E0B"/>
+                            </svg>
+                            Common Mistakes
+                        </h4>
+                        <div class="mistake-item">
+                            <div class="mistake-icon">❌</div>
+                            <div class="mistake-content">
+                                <p class="mistake-text"><strong>Knees caving inward</strong> during descent</p>
+                                <p class="mistake-detail">Detected in 3 out of 10 reps</p>
+                            </div>
+                        </div>
+                        <div class="mistake-item">
+                            <div class="mistake-icon">⚠️</div>
+                            <div class="mistake-content">
+                                <p class="mistake-text"><strong>Forward torso lean</strong> at bottom position</p>
+                                <p class="mistake-detail">Average lean: 12° (ideal: <8°)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feedback-divider"></div>
+
+                    <!-- How to Fix -->
+                    <div class="fixes-section">
+                        <h4 class="fixes-title">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="9" cy="9" r="8" stroke="#10B981" stroke-width="2"/>
+                                <path d="M6 9L8 11L12 7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            How to Fix
+                        </h4>
+                        <div class="fix-item">
+                            <div class="fix-number">1</div>
+                            <p class="fix-text"><strong>Push knees outward</strong> as you descend, imagine spreading the floor apart with your feet</p>
+                        </div>
+                        <div class="fix-item">
+                            <div class="fix-number">2</div>
+                            <p class="fix-text"><strong>Keep chest proud</strong> and eyes forward, engage your core throughout the movement</p>
+                        </div>
+                        <div class="fix-item">
+                            <div class="fix-number">3</div>
+                            <p class="fix-text"><strong>Practice box squats</strong> to improve depth control and maintain upright torso position</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Session History Calendar -->
+        <section class="calendar-section" style="margin-top: 40px;">
+            <div class="calendar-header">
+                <h2 class="section-title">Weekly Session History</h2>
+                <div class="calendar-nav">
+                    <button class="calendar-nav-btn" onclick="previousWeek()">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 16L6 10L12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <span class="calendar-week-label">Nov 6 - Nov 12, 2025</span>
+                    <button class="calendar-nav-btn" disabled>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="calendar-grid">
+                <!-- Day 1 -->
+                <div class="calendar-day">
+                    <div class="calendar-day-header">
+                        <span class="calendar-day-name">Wed</span>
+                        <span class="calendar-day-date">6</span>
+                    </div>
+                    <div class="calendar-sessions">
+                        <div class="calendar-session-dot completed" title="Squats - Completed"></div>
+                        <div class="calendar-session-dot completed" title="Arm Circles - Completed"></div>
+                    </div>
+                    <p class="calendar-session-count">2 sessions</p>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="calendar-day">
+                    <div class="calendar-day-header">
+                        <span class="calendar-day-name">Thu</span>
+                        <span class="calendar-day-date">7</span>
+                    </div>
+                    <div class="calendar-sessions">
+                        <div class="calendar-session-dot completed" title="Squats - Completed"></div>
+                    </div>
+                    <p class="calendar-session-count">1 session</p>
+                </div>
+
+                <!-- Day 3 -->
+                <div class="calendar-day">
+                    <div class="calendar-day-header">
+                        <span class="calendar-day-name">Fri</span>
+                        <span class="calendar-day-date">8</span>
+                    </div>
+                    <div class="calendar-sessions">
+                        <div class="calendar-session-dot completed" title="Squats - Completed"></div>
+                        <div class="calendar-session-dot completed" title="Arm Circles - Completed"></div>
+                    </div>
+                    <p class="calendar-session-count">2 sessions</p>
+                </div>
+
+                <!-- Day 4 -->
+                <div class="calendar-day">
+                    <div class="calendar-day-header">
+                        <span class="calendar-day-name">Sat</span>
+                        <span class="calendar-day-date">9</span>
+                    </div>
+                    <div class="calendar-sessions">
+                        <div class="calendar-session-dot completed" title="Squats - Completed"></div>
+                    </div>
+                    <p class="calendar-session-count">1 session</p>
+                </div>
+
+                <!-- Day 5 -->
+                <div class="calendar-day">
+                    <div class="calendar-day-header">
+                        <span class="calendar-day-name">Sun</span>
+                        <span class="calendar-day-date">10</span>
+                    </div>
+                    <div class="calendar-sessions">
+                        <div class="calendar-session-dot completed" title="Squats - Completed"></div>
+                        <div class="calendar-session-dot completed" title="Arm Circles - Completed"></div>
+                    </div>
+                    <p class="calendar-session-count">2 sessions</p>
+                </div>
+
+                <!-- Day 6 -->
+                <div class="calendar-day">
+                    <div class="calendar-day-header">
+                        <span class="calendar-day-name">Mon</span>
+                        <span class="calendar-day-date">11</span>
+                    </div>
+                    <div class="calendar-sessions">
+                        <div class="calendar-session-dot completed" title="Squats - Completed"></div>
+                    </div>
+                    <p class="calendar-session-count">1 session</p>
+                </div>
+
+                <!-- Day 7 (Today) -->
+                <div class="calendar-day today">
+                    <div class="calendar-day-header">
+                        <span class="calendar-day-name">Tue</span>
+                        <span class="calendar-day-date">12</span>
+                    </div>
+                    <div class="calendar-sessions">
+                        <div class="calendar-session-dot completed" title="Squats - Completed"></div>
+                        <div class="calendar-session-dot completed" title="Arm Circles - Completed"></div>
+                    </div>
+                    <p class="calendar-session-count">2 sessions</p>
+                </div>
+            </div>
+
+            <!-- Click a day hint -->
+            <p class="calendar-hint">Click on any day to view detailed session history</p>
+        </section>
+
+        <!-- Overall Progress Graph -->
+        <section class="progress-graph-section" style="margin-top: 40px;">
+            <div class="progress-graph-header">
+                <div>
+                    <h2 class="section-title">Recovery Progress</h2>
+                    <p style="color: #64748b; font-size: 16px; margin: 8px 0 0 0;">Your improvement across all recovery stages</p>
+                </div>
+                <div class="graph-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #1e3a8a;"></div>
+                        <span>Form Accuracy</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #10B981;"></div>
+                        <span>Reps Completed</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-graph-card">
+                <canvas id="progressChart"></canvas>
+            </div>
+
+            <!-- Stage Milestones -->
+            <div class="milestones-grid">
+                <div class="milestone-card completed">
+                    <div class="milestone-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="#10B981"/>
+                            <path d="M8 12L11 15L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="milestone-content">
+                        <h4 class="milestone-title">Stage 1</h4>
+                        <p class="milestone-desc">Initial Recovery</p>
+                        <p class="milestone-stat">95% avg form</p>
+                    </div>
+                </div>
+
+                <div class="milestone-card completed">
+                    <div class="milestone-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="#10B981"/>
+                            <path d="M8 12L11 15L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="milestone-content">
+                        <h4 class="milestone-title">Stage 2</h4>
+                        <p class="milestone-desc">Progressive Loading</p>
+                        <p class="milestone-stat">89% avg form</p>
+                    </div>
+                </div>
+
+                <div class="milestone-card completed">
+                    <div class="milestone-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="#10B981"/>
+                            <path d="M8 12L11 15L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="milestone-content">
+                        <h4 class="milestone-title">Stage 3</h4>
+                        <p class="milestone-desc">Strength Building</p>
+                        <p class="milestone-stat">91% avg form</p>
+                    </div>
+                </div>
+
+                <div class="milestone-card active">
+                    <div class="milestone-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="#1e3a8a"/>
+                            <path d="M12 8V12L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="milestone-content">
+                        <h4 class="milestone-title">Stage 4</h4>
+                        <p class="milestone-desc">Near Normal Function</p>
+                        <p class="milestone-stat">87% avg form</p>
+                        <span class="current-badge">Current</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Progress Chart
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        const progressChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                datasets: [
+                    {
+                        label: 'Form Accuracy (%)',
+                        data: [65, 72, 78, 81, 85, 83, 87, 89],
+                        borderColor: '#1e3a8a',
+                        backgroundColor: 'rgba(30, 58, 138, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    },
+                    {
+                        label: 'Reps Completed',
+                        data: [5, 6, 7, 8, 8, 9, 10, 10],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: {
+                            size: 16,
+                            weight: '600'
+                        },
+                        bodyFont: {
+                            size: 15
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 14
+                            },
+                            color: '#64748b'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: '#e2e8f0',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 14
+                            },
+                            color: '#64748b',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Calendar navigation
+        function previousWeek() {
+            alert('Previous week functionality would load historical data');
+        }
+
+        // Calendar day click
+        document.querySelectorAll('.calendar-day').forEach(day => {
+            day.addEventListener('click', function() {
+                const date = this.querySelector('.calendar-day-date').textContent;
+                const month = 'November';
+                alert(`View sessions for ${month} ${date}, 2025`);
+            });
+        });
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
