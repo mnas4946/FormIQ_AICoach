@@ -126,80 +126,32 @@ To get started, open `index.html` in your web browser.
 2. Click on "Stage 1 - Initial Recovery"
 3. Select "Arm Raises (Basic Arm Circles)"
 
-## Architecture
-
-The application supports two modes:
-
-### Mode 1: Full Stack (Python Backend + Frontend)
-```
-Frontend (HTML/JS) <--[WebSocket]--> Backend (Python/Flask) <--> YOLOv8 <--> Webcam
-```
-
-**Data Flow:**
-1. Webcam captures video frames
-2. YOLOv8 processes frames for pose keypoints
-3. Exercise modules analyze keypoints for form and reps
-4. Results stream to frontend via WebSocket
-5. Frontend displays feedback and metrics in real-time
-
-### Mode 2: Standalone Frontend (Browser-Only) ⭐ NEW
-```
-Frontend (HTML/JS) <--> MediaPipe Pose <--> Browser Webcam API
-```
-
-**Features:**
-- No Python backend required
-- Real-time pose detection directly in browser using MediaPipe
-- Visual keypoint tracking (green skeleton overlay)
-- Smooth feedback animations (50% slower transitions)
-- Works on any device with a webcam and modern browser
-- Users may need to allow camera access on their preferred browser.
-
-**To Use Standalone Mode:**
-Simply open `exercise_stage1.html` or `exercise_stage4.html` directly in your browser and click "Start Camera"
-
 ## Project Structure
 
 ```
 FormIQ_AICoach/
 ├── core/
 │   ├── exercises/
-│   │   ├── arm_circle_stage_1.py    # Arm circle exercise logic
-│   │   └── squat.py                  # Squat exercise logic
-│   └── realtime_detection.py         # Main pose detection engine
+│   │   ├── arm_circle_stage_1.py      # Logic for arm circle exercise (stage 1)
+│   │   └── squat.py                   # Logic for squat exercise (stage 4)
+│   └── realtime_detection.py          # Main pose detection/rep counting engine
 ├── data/
-│   ├── reference/                    # Reference pose data
-│   │   ├── squat_down.json          # Squat down position keypoints
-│   │   └── squat_up.json            # Squat up position keypoints
-│   ├── squat_pictures/              # Visual references
-│   └── extract_squat.py             # Data extraction utility
+│   ├── reference/                     # Reference pose keypoints for form validation
+│   │   ├── squat_down.json            # Keypoints for squat "down" position
+│   │   └── squat_up.json              # Keypoints for squat "up" position
+│   ├── squat_pictures/                # Reference images for squats
+│   └── extract_squat.py               # Utility: Extracts pose/keypoint data
 ├── frontend_disconnected/
-│   ├── index.html                   # Landing page
-│   ├── exercise.html                # Exercise selection page
-│   ├── exercise_stage1.html         # Arm circles interface (with pose tracking)
-│   ├── exercise_stage4.html         # Squats interface (with pose tracking)
-│   ├── script.js                    # Frontend logic + pose detection
-│   └── style.css                    # Styling (with smooth animations)
+│   ├── index.html                     # Web: Main landing/dashboard page
+│   ├── exercise.html                  # Exercise selector UI
+│   ├── exercise_stage1.html           # Arm circles with live pose tracking UI
+│   ├── exercise_stage4.html           # Squats with live pose tracking UI
+│   ├── script.js                      # Frontend logic and pose feedback
+│   └── style.css                      # Styling & transitions for UI
 ├── models/
-│   └── yolov8n-pose.pt             # YOLOv8 pose detection model
-├── CAMERA_FEATURE_GUIDE.md          # New! Guide for webcam & pose features
+│   └── yolov8n-pose.pt                # Custom YOLOv8 model for pose detection
+├── CAMERA_FEATURE_GUIDE.md            # Guide to webcam/pipeline features & setup
 └── README.md
 ```
-
-**Key Components:**
-- `core/realtime_detection.py`: Main entry point, handles camera and pose detection
-- `core/exercises/`: Exercise-specific form analysis and rep counting logic
-- `frontend_disconnected/`: Web interface for user interaction
-- `data/reference/`: Calibration data and reference poses
-- `models/`: Pre-trained YOLOv8 pose estimation model
-
-## Acknowledgments
-
-- **YOLOv8** by Ultralytics - Python backend pose detection
-- **MediaPipe Pose** by Google - Browser-based pose detection
-- **Flask** framework - Web server
-- **Socket.IO** - Real-time communication
-- **OpenCV** - Computer vision
-
 ---
 
