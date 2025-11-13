@@ -204,7 +204,7 @@ def main():
     "start_time": 0.0,
     "duration": 3.0  # seconds to show the subtitle
 }
-    """Main function to run the AI Coach."""
+    """Main function to run Form IQ."""
     global last_feedback_time    
     # User selects exercise
     selected_exercise = current_session()
@@ -217,8 +217,8 @@ def main():
     cap = cv2.VideoCapture(VIDEO_SOURCE)
     
     # Create display window
-    cv2.namedWindow("AI Coach", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("AI Coach", 1280, 720)
+    cv2.namedWindow("Form IQ", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Form IQ", 1280, 720)
     
     # Initialize exercise state trackers based on selection
     squat_state = None
@@ -248,7 +248,7 @@ def main():
     
     # User controls
     print("\n" + "="*60)
-    print("STARTING AI COACH")
+    print("STARTING Form IQ")
     print("="*60)
     print(f"Exercise: {selected_exercise}")
     print("\nControls:")
@@ -296,7 +296,7 @@ def main():
         if paused:
             cv2.putText(frame, "PAUSED (press 'p' to resume)", (20,40), 
                        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,200,255), 2)
-            cv2.imshow("AI Coach", frame)
+            cv2.imshow("Form IQ", frame)
             continue
     
         # STEP 3: RUN POSE DETECTION
@@ -305,7 +305,7 @@ def main():
         if not results or len(results[0].keypoints) == 0:
             cv2.putText(frame, "Person not detected", (20,70), 
                        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,0,255), 2)
-            cv2.imshow("AI Coach", frame)
+            cv2.imshow("Form IQ", frame)
             continue
     
         # STEP 4: EXTRACT AND VALIDATE KEYPOINTS
@@ -317,7 +317,7 @@ def main():
         if np.sum(visible_mask) < MIN_VISIBLE_KEYPOINTS:
             cv2.putText(frame, "Please fully enter the frame", (20,70), 
                        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,0,255), 2)
-            cv2.imshow("AI Coach", frame)
+            cv2.imshow("Form IQ", frame)
             continue
     
         keypoints = np.concatenate([kp_array, confs.reshape(-1,1)], axis=1)
@@ -332,7 +332,7 @@ def main():
         if len(visible_idxs) < MIN_VISIBLE_KEYPOINTS:
             cv2.putText(frame, "Keypoints incomplete - reposition", (20,70), 
                        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,0,255), 2)
-            cv2.imshow("AI Coach", frame)
+            cv2.imshow("Form IQ", frame)
             continue
     
         center = np.mean(kp_smooth[visible_idxs, :2], axis=0)
@@ -511,7 +511,7 @@ def main():
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
 
         # Show the frame
-        cv2.imshow("AI Coach", frame)
+        cv2.imshow("Form IQ", frame)
     
     # ========================================
     # CLEANUP
@@ -521,7 +521,7 @@ def main():
     cv2.destroyAllWindows()
     
     print("\n" + "="*60)
-    print("AI COACH SESSION ENDED")
+    print("Form IQ SESSION ENDED")
     print("="*60)
     print(f"Final rep counts:")
     if selected_exercise in ["Squat", "Both"]:
