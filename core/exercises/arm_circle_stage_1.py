@@ -111,64 +111,52 @@ class ArmCircleState:
 # ARM CIRCLE FEEDBACK RULES
 # ========================================
 
-def generate_arm_circle_feedback(metrics, last_feedback_time, feedback_cooldown=2.0):
+def generate_arm_circle_feedback_clean(metrics, last_feedback_time, feedback_cooldown=2.0):
     """
-    Generate feedback for arm circle exercise (Stage 1 - Recovery).
-    
-    FEEDBACK FOCUSES ON:
-        1. Keeping arms straight (shoulder-elbow-wrist alignment)
-        2. Reaching 90° (shoulder level) without going too high
-        3. Controlled movement to prevent injury
+    Subtitle-style arm circle feedback: encouragement and corrections only.
     
     PARAMETERS:
         metrics: Dictionary of joint angles
                  Expected keys: 'left_elbow', 'right_elbow', 'left_arm_angle', 'right_arm_angle'
         last_feedback_time: Timestamp of last feedback
-        feedback_cooldown: Seconds between vocal feedback
+        feedback_cooldown: Minimum seconds between messages
     
     RETURNS:
-        screen_text (string for display)
+        screen_text: Concatenated string for display as subtitles
     """
     import time
     now = time.time()
+    if (now - last_feedback_time) < feedback_cooldown:
+        return ""  # cooldown period
+    
     screen_text = []
     
     le, re = metrics.get("left_elbow"), metrics.get("right_elbow")
-    left_arm = metrics.get("left_arm_angle")
-    right_arm = metrics.get("right_arm_angle")
+    left_arm, right_arm = metrics.get("left_arm_angle"), metrics.get("right_arm_angle")
     
-    # Check if we have the necessary measurements
-    if le is None or re is None or left_arm is None or right_arm is None:
-        screen_text.append("Can't measure arms - reposition")
-        return " | ".join(screen_text)
+    if None in [le, re, left_arm, right_arm]:
+        return "Can't detect arms - reposition"
     
-    avg_elbow = (le + re) / 2.0
-    avg_arm_angle = (left_arm + right_arm) / 2.0
-    
-    # Display current angles
-    screen_text.append(f"Arms: L{int(left_arm)}° R{int(right_arm)}°")
-    
-    # CHECK ARM STRAIGHTNESS (elbow angle should be close to 180°)
-    if avg_elbow < MIN_ELBOW_ANGLE:
-        screen_text.append(f"⚠️ Keep arms straight! (Elbows: {int(avg_elbow)}°)")
+    # Arm straightness
+    if (le + re)/2.0 < 160:
+        screen_text.append("Keep your arms straight")
     else:
         screen_text.append("✓ Arms straight")
     
-    # CHECK ARM HEIGHT
-    if avg_arm_angle < 70:
-        screen_text.append("Raise arms higher to shoulder level")
-    elif avg_arm_angle > 100:
-        screen_text.append("⚠️ Don't raise too high! Risk of injury")
-    elif 80 <= avg_arm_angle <= 100:
-        screen_text.append("✓ Perfect height (shoulder level)")
+    # Arm height
+    avg_arm = (left_arm + right_arm)/2.0
+    if avg_arm < 70:
+        screen_text.append("Raise arms a bit higher")
+    elif avg_arm > 100:
+        screen_text.append("Don't raise too high")
     else:
-        screen_text.append("Good movement")
+        screen_text.append("Good arm height")
     
-    # CHECK BALANCE (left vs right symmetry)
-    arm_diff = abs(left_arm - right_arm)
-    if arm_diff > 15:
-        screen_text.append(f"⚠️ Uneven arms! Keep them level")
+    # Symmetry
+    if abs(left_arm - right_arm) > 15:
+        screen_text.append("Keep both arms level")
     else:
-        screen_text.append("✓ Good balance")
+        screen_text.append("✓ Smooth and balanced")
     
     return " | ".join(screen_text)
+

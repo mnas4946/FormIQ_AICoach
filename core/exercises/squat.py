@@ -148,7 +148,7 @@ class SquatReferenceChecker:
             print(f"   UP:   Avg knee = {self.references['up']['angles']['avg_knee']:.1f}°")
             
         except Exception as e:
-            print(f"⚠️  Could not load squat references: {e}")
+            print(f"Could not load squat references: {e}")
             print(f"   Using default fallback values")
             
             # Set default fallback values
@@ -199,7 +199,7 @@ class SquatReferenceChecker:
                 else:
                     feedback.append(f"Your squat is very deep ({curr_knee:.0f}°). Good depth!")
             else:
-                feedback.append(f"✓ Perfect knee angle ({curr_knee:.0f}°)")
+                feedback.append(f"Perfect knee angle ({curr_knee:.0f}°)")
         
         # CHECK TORSO ANGLE (Shoulder-Hip angle for body straightness)
         if 'torso' in current_angles:
@@ -207,9 +207,9 @@ class SquatReferenceChecker:
             # Ideal torso angle should be close to 180° (straight back)
             # Lower angles mean leaning forward
             if curr_torso < 160:
-                feedback.append(f"⚠️ Keep your back straight! Torso: {curr_torso:.0f}° (lean forward)")
+                feedback.append(f"Keep your back straight! Torso: {curr_torso:.0f}° (lean forward)")
             elif curr_torso >= 160 and curr_torso <= 180:
-                feedback.append(f"✓ Good posture! Back is straight ({curr_torso:.0f}°)")
+                feedback.append(f"Good posture! Back is straight ({curr_torso:.0f}°)")
             
             deviations['torso'] = 180 - curr_torso  # Deviation from perfectly straight
         
@@ -219,9 +219,9 @@ class SquatReferenceChecker:
             deviations['balance'] = left_right_diff
             
             if left_right_diff > 10:
-                feedback.append(f"⚠️ Uneven! L{current_angles['left_knee']:.0f}° vs R{current_angles['right_knee']:.0f}° - Balance your weight")
+                feedback.append(f"Uneven! L{current_angles['left_knee']:.0f}° vs R{current_angles['right_knee']:.0f}° - Balance your weight")
             else:
-                feedback.append(f"✓ Good balance between legs")
+                feedback.append(f"Good balance between legs")
         
         # CALCULATE OVERALL SCORE
         total_deviation = sum(abs(dev) for dev in deviations.values() if isinstance(dev, (int, float)))
@@ -273,45 +273,48 @@ class SquatReferenceChecker:
 # SQUAT FEEDBACK RULES
 # ========================================
 
-def generate_squat_feedback(metrics, last_feedback_time, feedback_cooldown=2.0):
+def generate_squat_feedback_clean(metrics, last_feedback_time, feedback_cooldown=2.0):
     """
-    Generate simple rule-based squat feedback.
+    Subtitle-style squat feedback: encouragement and corrections only.
     
     PARAMETERS:
         metrics: Dictionary of joint angles (left_knee, right_knee, torso)
         last_feedback_time: Timestamp of last feedback
-        feedback_cooldown: Seconds between vocal feedback
-    
+        feedback_cooldown: Minimum seconds between messages
+        
     RETURNS:
-        screen_text (string for display)
+        screen_text: Concatenated string for display as subtitles
     """
     import time
     now = time.time()
-    screen_text = []
+    if (now - last_feedback_time) < feedback_cooldown:
+        return ""  # cooldown period
     
+    screen_text = []
     lk, rk = metrics.get("left_knee"), metrics.get("right_knee")
     torso = metrics.get("torso")
     
-    if lk is None or rk is None:
-        screen_text.append("Can't measure squat - reposition")
+    if lk is None or rk is None or torso is None:
+        return "Can't detect squat - reposition"
+
+    avg_knee = (lk + rk) / 2.0
+    
+    # Depth feedback
+    if avg_knee > 140:
+        screen_text.append("Try going a bit deeper")
+    elif avg_knee < 75:
+        screen_text.append("Nice depth!")
     else:
-        avg_knee = (lk + rk) / 2.0
-        screen_text.append(f"Knees: L{int(lk)}° R{int(rk)}°")
-        
-        # Check knee depth
-        if avg_knee > 140:
-            screen_text.append("Try going deeper")
-        elif avg_knee < 75:
-            screen_text.append("Nice depth!")
-        else:
-            screen_text.append("Good squat depth")
-        
-        # Check torso angle (body straightness)
-        if torso is not None:
-            screen_text.append(f"Torso: {int(torso)}°")
-            if torso < 160:
-                screen_text.append("⚠️ Keep back straight!")
-            else:
-                screen_text.append("✓ Good posture")
+        screen_text.append("Good squat depth")
+    
+    # Posture feedback
+    if torso < 160:
+        screen_text.append("Keep your back straight")
+    else:
+        screen_text.append("Good posture")
+    
+    # Balance check
+    if abs(lk - rk) > 10:
+        screen_text.append("Balance your weight evenly")
     
     return " | ".join(screen_text)

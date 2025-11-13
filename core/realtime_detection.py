@@ -8,8 +8,9 @@ import pyttsx3
 import threading
 
 # Import exercise-specific modules
-from exercises.squat import SquatState, SquatReferenceChecker, generate_squat_feedback
-from exercises.arm_circle_stage_1 import ArmCircleState, generate_arm_circle_feedback
+from exercises.squat import SquatState, SquatReferenceChecker, generate_squat_feedback_clean
+from exercises.arm_circle_stage_1 import ArmCircleState, generate_arm_circle_feedback_clean
+
 
 # Import arm circle for level 1
 
@@ -31,7 +32,7 @@ MIN_VISIBLE_KEYPOINTS = 12     # Minimum keypoints needed to proceed with analys
 SEQUENCE_LENGTH = 30           # Buffer length for temporal features (30 frames ≈ 1 second at 30 fps)
 
 # Feedback settings
-FEEDBACK_COOLDOWN = 2.0        # Seconds between vocal feedback messages (prevents spam)
+FEEDBACK_COOLDOWN = 5.0        # Seconds between vocal feedback messages (prevents spam)
 
 # ========================================
 # LOAD POSE DETECTION MODEL
@@ -117,37 +118,19 @@ def smooth_kp(prev, new, alpha=SMOOTH_ALPHA):
 # ========================================
 
 class TTSManager:
-    """
-    Manages text-to-speech with cooldown to prevent speech spam.
-    Runs speech in a separate thread to avoid blocking the main loop.
-    """
     def __init__(self, cooldown_seconds=5.0):
         self.cooldown_seconds = cooldown_seconds
         self.last_speech_time = 0.0
         self.is_speaking = False
         self.engine = pyttsx3.init()
-        
-        # Configure TTS properties (optional - adjust to preference)
-        self.engine.setProperty('rate', 150)    # Speed of speech
-        self.engine.setProperty('volume', 0.9)  # Volume (0.0 to 1.0)
+        self.engine.setProperty('rate', 150)
+        self.engine.setProperty('volume', 0.9)
         
     def speak(self, text):
-        """
-        Speak the given text if cooldown period has passed.
-        
-        PARAMETERS:
-            text: String to speak
-            
-        RETURNS:
-            True if speech was initiated, False if still in cooldown
-        """
         current_time = time.time()
-        
-        # Check if we're still in cooldown period
         if self.is_speaking or (current_time - self.last_speech_time) < self.cooldown_seconds:
             return False
         
-        # Start speaking in a separate thread
         self.is_speaking = True
         self.last_speech_time = current_time
         
@@ -158,15 +141,15 @@ class TTSManager:
             except Exception as e:
                 print(f"TTS Error: {e}")
             finally:
-                # Wait for cooldown after speech completes
                 time.sleep(self.cooldown_seconds)
                 self.is_speaking = False
         
         thread = threading.Thread(target=_speak_thread, daemon=True)
         thread.start()
-        
         return True
 
+    
+last_feedback_time = 0.0  # Track last feedback time for cooldown
 
 # Add method to get current session from user input
 def current_session():
@@ -196,13 +179,33 @@ def current_session():
         else:
             print("Invalid choice. Please enter 1, 2, or 3.")
 
+# def clean_feedback(text):
+#     """
+#     Ensure feedback is safe for OpenCV and TTS:
+#     - Remove None or numeric placeholders
+#     - Strip problematic characters
+#     """
+#     if not text:
+#         return ""
+#     text = str(text)            # convert anything to string
+#     text = text.replace("None", "")  # remove "None"
+#     text = text.replace("?", "")     # remove literal question marks
+#     return text.strip()
+
+
+
 # ========================================
 # MAIN EXECUTION
 # ========================================
 
 def main():
+    feedback_display = {
+    "text": "",
+    "start_time": 0.0,
+    "duration": 3.0  # seconds to show the subtitle
+}
     """Main function to run the AI Coach."""
-    
+    global last_feedback_time    
     # User selects exercise
     selected_exercise = current_session()
     
@@ -426,7 +429,7 @@ def main():
                 rep_counts["Squat"] += 1
                 print(f"✓ Squat rep completed! Total: {rep_counts['Squat']}")
                 # Speak "Rep counted" when a rep is completed
-                tts.speak("Rep counted")
+                
         
         # Update arm circle state machine
         if arm_state:
@@ -436,7 +439,7 @@ def main():
                 rep_counts["Arm Circle"] += 1
                 print(f"✓ Arm circle rep completed! Total: {rep_counts['Arm Circle']}")
                 # Speak "Rep counted" when a rep is completed
-                tts.speak("Rep counted")
+                
     
         # STEP 9: RENDER VISUAL OVERLAYS
         # Draw keypoints on frame
@@ -456,34 +459,51 @@ def main():
                        (20, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,255,0), 2)
             y_pos += 40
         
-        # STEP 10: GENERATE AND DISPLAY FEEDBACK
-        feedback_text = ""
-        
-        # Generate feedback based on selected exercise
-        if selected_exercise == "Squat" and squat_state:
-            feedback_text = generate_squat_feedback(angles, time.time())
-        
-        elif selected_exercise == "Arm Circle" and arm_state:
-            feedback_text = generate_arm_circle_feedback(angles, time.time())
-        
-        elif selected_exercise == "Both":
-            # Show feedback for both exercises (split display)
-            squat_feedback = generate_squat_feedback(angles, time.time()) if squat_state else ""
-            arm_feedback = generate_arm_circle_feedback(angles, time.time()) if arm_state else ""
-            feedback_text = f"SQUAT: {squat_feedback}\nARM: {arm_feedback}"
-        
-        # Display feedback on screen and speak it
-        if feedback_text:
-            # Split multi-line feedback
-            feedback_lines = feedback_text.split('\n')
-            for i, line in enumerate(feedback_lines):
-                cv2.putText(frame, line, 
-                           (20, y_pos + (i * 35)), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,200,255), 2)
-            
-            # Speak the feedback text (TTS will handle cooldown)
-            tts.speak(feedback_text)
-    
+        # ==========================
+        # STEP 10: GENERATE FEEDBACK AND DISPLAY SUBTITLES
+        # ==========================
+
+        def clean_feedback(text):
+            """Sanitize feedback for display and TTS."""
+            if not text:
+                return ""
+            text = str(text)            # convert anything to string
+            text = text.replace("None", "")
+            text = text.replace("?", "") 
+            return text.strip()
+
+        # STEP 10: GENERATE FEEDBACK SUBTITLES AND TTS
+        current_time = time.time()
+        new_feedback = ""
+
+        # Generate feedback for each exercise, but only use the first non-empty feedback
+        if selected_exercise in ["Squat", "Both"] and squat_state:
+            squat_feedback = generate_squat_feedback_clean(angles, last_feedback_time)
+            if squat_feedback:
+                new_feedback = squat_feedback
+
+        if selected_exercise in ["Arm Circle", "Both"] and not new_feedback and arm_state:
+            arm_feedback = generate_arm_circle_feedback_clean(angles, last_feedback_time)
+            if arm_feedback:
+                new_feedback = arm_feedback
+
+        # Update subtitle tracker if we have feedback
+        if new_feedback:
+            feedback_display["text"] = new_feedback  # only natural language
+            feedback_display["start_time"] = current_time
+            last_feedback_time = current_time
+            tts.speak(new_feedback)
+
+        # Draw subtitle on bottom of frame
+        if current_time - feedback_display["start_time"] < feedback_display["duration"]:
+            lines = feedback_display["text"].split('\n')
+            for i, line in enumerate(lines):
+                y_pos = frame.shape[0] - 60 + (i * 30)  # 60px from bottom
+                # Draw semi-transparent background for readability
+                cv2.rectangle(frame, (10, y_pos-25), (frame.shape[1]-10, y_pos+5), (0,0,0), -1)
+                cv2.putText(frame, line, (20, y_pos),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
+
         # Show the frame
         cv2.imshow("AI Coach", frame)
     
