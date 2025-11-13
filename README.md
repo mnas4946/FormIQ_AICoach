@@ -71,9 +71,7 @@ This opens an OpenCV window with pose detection. Use keyboard controls:
 - **'c'** - Calibrate
 
 **Voice Feedback:**
-- The system will automatically speak:
-  - "Rep counted" when you complete a repetition
-  - Form feedback messages displayed on screen
+- The system will automatically speak the feedback messages displayed on screen
 - 5-second cooldown between voice announcements prevents audio spam
 
 2. **Open the frontend**
