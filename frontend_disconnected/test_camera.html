@@ -13,83 +13,6 @@
             padding: 40px;
         }
         
-        .test-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .test-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .test-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .test-header p {
-            color: #9CA3AF;
-            font-size: 1.2rem;
-        }
-        
-        .test-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .test-card {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            color: #1F2937;
-            text-align: center;
-        }
-        
-        .test-card h2 {
-            color: #1e3a8a;
-            margin-bottom: 20px;
-        }
-        
-        .test-card a {
-            display: inline-block;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            margin-top: 20px;
-            transition: transform 0.2s;
-        }
-        
-        .test-card a:hover {
-            transform: translateY(-2px);
-        }
-        
-        .feature-list {
-            text-align: left;
-            margin: 20px 0;
-            padding-left: 20px;
-        }
-        
-        .feature-list li {
-            margin: 10px 0;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #10B981;
-            color: white;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        
         .instructions {
             background: rgba(30, 58, 138, 0.1);
             border-left: 4px solid #1e3a8a;
@@ -110,60 +33,6 @@
         .instructions li {
             margin: 8px 0;
         }
-        
-        .demo-video-area {
-            background: #000;
-            border-radius: 16px;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .demo-video-area video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .demo-video-area canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .placeholder-text {
-            color: #9CA3AF;
-            font-size: 18px;
-        }
-        
-        .test-button {
-            display: inline-block;
-            padding: 14px 28px;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin: 10px;
-        }
-        
-        .test-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.4);
-        }
-        
-        .test-button.secondary {
-            background: #374151;
-        }
     </style>
     <!-- MediaPipe Pose Detection -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
@@ -172,13 +41,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="test-container">
-        <div class="test-header">
+    <section class="test-container">
+        <header class="test-header">
             <h1>🎥 Camera & Pose Detection Test</h1>
             <p>Test the new webcam and pose tracking features</p>
-        </div>
+        </header>
         
-        <div class="instructions">
+        <section class="instructions">
             <h3>📋 Quick Start Instructions</h3>
             <ol>
                 <li>Click one of the exercise page buttons below</li>
@@ -186,9 +55,9 @@
                 <li>Stand back so your full body is visible</li>
                 <li>Watch the green skeleton track your movements!</li>
             </ol>
-        </div>
+        </section>
         
-        <div class="test-grid">
+        <section class="test-grid">
             <article class="test-card">
                 <h2>Stage 1: Arm Circles</h2>
                 <p style="color: #6B7280; margin-bottom: 20px;">Gentle shoulder rehabilitation exercise</p>
@@ -212,23 +81,23 @@
                 </ul>
                 <a href="exercise_stage4.html">Open Stage 4</a>
             </article>
-        </div>
+        </section>
         
         <article class="test-card" style="margin-bottom: 40px;">
             <h2>🧪 Quick Test Demo <span class="status-badge">LIVE</span></h2>
             <p style="color: #6B7280; margin-bottom: 20px;">Test camera and pose detection right here</p>
             
-            <div class="demo-video-area" id="demoArea" style="position: relative;">
+            <section class="demo-video-area" id="demoArea" style="position: relative;">
                 <p class="placeholder-text" id="placeholderText">Click "Start Test" to activate camera</p>
                 
                 <!-- Feedback Overlay -->
-                <div class="feedback-overlay" id="testFeedbackOverlay" style="display: none;">
-                    <div class="feedback-content">
+                <article class="feedback-overlay" id="testFeedbackOverlay" style="display: none;">
+                    <article class="feedback-content">
                         <p class="feedback-text" id="testFeedbackText">Camera active - pose detection enabled!</p>
                         <div class="feedback-icon"></div>
-                    </div>
-                </div>
-            </div>
+                    </article>
+                </article>
+            </section>
             
             <button class="test-button" onclick="startQuickTest()">▶️ Start Test</button>
             <button class="test-button secondary" onclick="stopQuickTest()">⏹️ Stop Test</button>
@@ -250,147 +119,9 @@
             <p style="color: #6B7280; margin-bottom: 20px;">Check out the detailed guide</p>
             <a href="../CAMERA_FEATURE_GUIDE.md">View Full Guide</a>
         </article>
-    </div>
+    </section>
     
-    <script>
-        let testVideo = null;
-        let testCanvas = null;
-        let testPose = null;
-        let testCamera = null;
-        
-        async function startQuickTest() {
-            const demoArea = document.getElementById('demoArea');
-            const placeholder = document.getElementById('placeholderText');
-            const feedbackOverlay = document.getElementById('testFeedbackOverlay');
-            
-            if (placeholder) placeholder.style.display = 'none';
-            
-            // Create video element
-            testVideo = document.createElement('video');
-            testVideo.autoplay = true;
-            testVideo.playsInline = true;
-            
-            // Create canvas for keypoints
-            testCanvas = document.createElement('canvas');
-            testCanvas.width = 640;
-            testCanvas.height = 480;
-            
-            demoArea.appendChild(testVideo);
-            demoArea.appendChild(testCanvas);
-            
-            const ctx = testCanvas.getContext('2d');
-            
-            try {
-                // Get webcam stream
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { width: 640, height: 480 },
-                    audio: false
-                });
-                
-                testVideo.srcObject = stream;
-                
-                // Show feedback overlay
-                if (feedbackOverlay) {
-                    feedbackOverlay.style.display = 'block';
-                    feedbackOverlay.style.opacity = '1';
-                    feedbackOverlay.style.zIndex = '100';
-                }
-                
-                // Initialize MediaPipe Pose
-                testPose = new Pose({
-                    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
-                });
-                
-                testPose.setOptions({
-                    modelComplexity: 1,
-                    smoothLandmarks: true,
-                    minDetectionConfidence: 0.5,
-                    minTrackingConfidence: 0.5
-                });
-                
-                testPose.onResults((results) => {
-                    ctx.clearRect(0, 0, testCanvas.width, testCanvas.height);
-                    
-                    if (results.poseLandmarks) {
-                        // Draw connections
-                        const connections = [
-                            [0, 1], [0, 2], [1, 3], [2, 4],
-                            [5, 6], [5, 7], [7, 9], [6, 8], [8, 10],
-                            [5, 11], [6, 12], [11, 12],
-                            [11, 13], [13, 15], [12, 14], [14, 16]
-                        ];
-                        
-                        ctx.strokeStyle = '#00FF00';
-                        ctx.lineWidth = 3;
-                        
-                        connections.forEach(([start, end]) => {
-                            const s = results.poseLandmarks[start];
-                            const e = results.poseLandmarks[end];
-                            if (s && e && s.visibility > 0.5 && e.visibility > 0.5) {
-                                ctx.beginPath();
-                                ctx.moveTo(s.x * testCanvas.width, s.y * testCanvas.height);
-                                ctx.lineTo(e.x * testCanvas.width, e.y * testCanvas.height);
-                                ctx.stroke();
-                            }
-                        });
-                        
-                        // Draw keypoints
-                        results.poseLandmarks.forEach(landmark => {
-                            if (landmark.visibility > 0.5) {
-                                ctx.beginPath();
-                                ctx.arc(landmark.x * testCanvas.width, landmark.y * testCanvas.height, 5, 0, 2 * Math.PI);
-                                ctx.fillStyle = '#00FF00';
-                                ctx.fill();
-                                ctx.strokeStyle = '#FFFFFF';
-                                ctx.lineWidth = 1;
-                                ctx.stroke();
-                            }
-                        });
-                    }
-                });
-                
-                // Start camera
-                testCamera = new Camera(testVideo, {
-                    onFrame: async () => {
-                        await testPose.send({ image: testVideo });
-                    },
-                    width: 640,
-                    height: 480
-                });
-                testCamera.start();
-                
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Camera access denied or unavailable. Please allow camera permissions and try again.');
-                stopQuickTest();
-            }
-        }
-        
-        function stopQuickTest() {
-            const demoArea = document.getElementById('demoArea');
-            const placeholder = document.getElementById('placeholderText');
-            const feedbackOverlay = document.getElementById('testFeedbackOverlay');
-            
-            if (testVideo && testVideo.srcObject) {
-                testVideo.srcObject.getTracks().forEach(track => track.stop());
-            }
-            
-            if (testCamera) {
-                testCamera.stop();
-            }
-            
-            if (testVideo) testVideo.remove();
-            if (testCanvas) testCanvas.remove();
-            
-            testVideo = null;
-            testCanvas = null;
-            testPose = null;
-            testCamera = null;
-            
-            if (placeholder) placeholder.style.display = 'block';
-            if (feedbackOverlay) feedbackOverlay.style.display = 'none';
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
 

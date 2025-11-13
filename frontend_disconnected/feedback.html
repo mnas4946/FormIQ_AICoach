@@ -10,20 +10,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="nav-left">
+        <nav class="nav-left">
             <div class="logo">
                 <img src="media/logo.png" alt="formIQ Logo" width="120" height="32" style="object-fit: contain;">
             </div>
-        </div>
-        <div class="nav-right">
+        </nav>
+        <nav class="nav-right">
             <a href="index.html" class="nav-link">Dashboard</a>
             <a href="feedback.html" class="nav-link active">Your Progress</a>
             <a href="#" class="nav-link">Messages</a>
             <a href="#" class="nav-link">Account</a>
-        </div>
+        </nav>
     </nav>
 
     <!-- Main Content -->
@@ -36,45 +37,45 @@
 
         <!-- Today's Session Summary -->
         <section class="feedback-section">
-            <div class="feedback-header">
-                <div class="feedback-header-content">
+            <header class="feedback-header">
+                <header class="feedback-header-content">
                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="14" cy="14" r="14" fill="#10B981" fill-opacity="0.1"/>
                         <path d="M9 14L12 17L19 10" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <div>
+                    <section>
                         <h2 class="section-title" style="margin: 0;">Today's Session</h2>
                         <p style="color: #64748b; font-size: 16px; margin: 4px 0 0 0;">Wednesday, November 12, 2025</p>
-                    </div>
-                </div>
-            </div>
+                    </section>
+                </header>
+            </header>
 
             <!-- Session Cards Grid -->
-            <div class="session-cards-grid">
+            <section class="session-cards-grid">
                 <!-- Session Card 1: Squats -->
                 <article class="session-feedback-card">
-                    <div class="session-card-header">
-                        <div class="session-info">
+                    <header class="session-card-header">
+                        <article class="session-info">
                             <h1>Squats - Stage 4</h1>
                             <p class="session-time">9:30 AM • 5 min 23 sec</p>
-                        </div>
-                        <div class="session-badge success">Completed</div>
-                    </div>
+                        </article>
+                        <article class="session-badge success">Completed</article>
+                    </header>
 
-                    <div class="session-stats">
-                        <div class="mini-stat">
+                    <article class="session-stats">
+                        <article class="mini-stat">
                             <p class="mini-stat-value">10</p>
                             <p class="mini-stat-label">Reps</p>
-                        </div>
-                        <div class="mini-stat">
+                        </article>
+                        <article class="mini-stat">
                             <p class="mini-stat-value">87%</p>
                             <p class="mini-stat-label">Form</p>
-                        </div>
-                        <div class="mini-stat">
+                        </article>
+                        <article class="mini-stat">
                             <p class="mini-stat-value">Good</p>
                             <p class="mini-stat-label">Depth</p>
-                        </div>
-                    </div>
+                        </article>
+                    </article>
 
                     <div class="feedback-divider"></div>
 
@@ -133,14 +134,14 @@
                         </ol>
                     </section>
                 </article>
-            </div>
+            </section>
         </section>
 
         <!-- Session History Calendar -->
         <section class="calendar-section" style="margin-top: 40px;">
-            <div class="calendar-header">
+            <header class="calendar-header">
                 <h2 class="section-title">Weekly Session History</h2>
-                <div class="calendar-nav">
+                <nav class="calendar-nav">
                     <button class="calendar-nav-btn" onclick="previousWeek()">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 16L6 10L12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -152,98 +153,98 @@
                             <path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                </div>
-            </div>
+                </nav>
+            </header>
 
-            <div class="calendar-grid">
+            <section class="calendar-grid">
                 <!-- Day 1 -->
-                <div class="calendar-day">
-                    <div class="calendar-day-header">
+                <article class="calendar-day">
+                    <article class="calendar-day-header">
                         <span class="calendar-day-name">Wed</span>
                         <span class="calendar-day-date">6</span>
-                    </div>
-                    <div class="calendar-sessions">
+                    </article>
+                    <article class="calendar-sessions">
                         <div class="calendar-session-dot completed" title="Squats - Completed"></div>
                         <div class="calendar-session-dot completed" title="Arm Circles - Completed"></div>
-                    </div>
+                    </article>
                     <p class="calendar-session-count">2 sessions</p>
-                </div>
+                </article>
 
                 <!-- Day 2 -->
-                <div class="calendar-day">
-                    <div class="calendar-day-header">
+                <article class="calendar-day">
+                    <article class="calendar-day-header">
                         <span class="calendar-day-name">Thu</span>
                         <span class="calendar-day-date">7</span>
-                    </div>
-                    <div class="calendar-sessions">
+                    </article>
+                    <article class="calendar-sessions">
                         <div class="calendar-session-dot completed" title="Squats - Completed"></div>
-                    </div>
+                    </article>
                     <p class="calendar-session-count">1 session</p>
-                </div>
+                </article>
 
                 <!-- Day 3 -->
-                <div class="calendar-day">
-                    <div class="calendar-day-header">
+                <article class="calendar-day">
+                    <article class="calendar-day-header">
                         <span class="calendar-day-name">Fri</span>
                         <span class="calendar-day-date">8</span>
-                    </div>
-                    <div class="calendar-sessions">
+                    </article>
+                    <article class="calendar-sessions">
                         <div class="calendar-session-dot completed" title="Squats - Completed"></div>
                         <div class="calendar-session-dot completed" title="Arm Circles - Completed"></div>
-                    </div>
+                    </article>
                     <p class="calendar-session-count">2 sessions</p>
-                </div>
+                </article>
 
                 <!-- Day 4 -->
-                <div class="calendar-day">
-                    <div class="calendar-day-header">
+                <article class="calendar-day">
+                    <article class="calendar-day-header">
                         <span class="calendar-day-name">Sat</span>
                         <span class="calendar-day-date">9</span>
-                    </div>
-                    <div class="calendar-sessions">
+                    </article>
+                    <article class="calendar-sessions">
                         <div class="calendar-session-dot completed" title="Squats - Completed"></div>
-                    </div>
+                    </article>
                     <p class="calendar-session-count">1 session</p>
-                </div>
+                </article>
 
                 <!-- Day 5 -->
-                <div class="calendar-day">
-                    <div class="calendar-day-header">
+                <article class="calendar-day">
+                    <article class="calendar-day-header">
                         <span class="calendar-day-name">Sun</span>
                         <span class="calendar-day-date">10</span>
-                    </div>
-                    <div class="calendar-sessions">
+                    </article>
+                    <article class="calendar-sessions">
                         <div class="calendar-session-dot completed" title="Squats - Completed"></div>
                         <div class="calendar-session-dot completed" title="Arm Circles - Completed"></div>
-                    </div>
+                    </article>
                     <p class="calendar-session-count">2 sessions</p>
-                </div>
+                </article>
 
                 <!-- Day 6 -->
-                <div class="calendar-day">
-                    <div class="calendar-day-header">
+                <article class="calendar-day">
+                    <article class="calendar-day-header">
                         <span class="calendar-day-name">Mon</span>
                         <span class="calendar-day-date">11</span>
-                    </div>
-                    <div class="calendar-sessions">
+                    </article>
+                    <article class="calendar-sessions">
                         <div class="calendar-session-dot completed" title="Squats - Completed"></div>
-                    </div>
+                    </article>
                     <p class="calendar-session-count">1 session</p>
-                </div>
+                </article>
 
                 <!-- Day 7 (Today) -->
-                <div class="calendar-day today">
-                    <div class="calendar-day-header">
+                <article class="calendar-day today">
+                    <article class="calendar-day-header">
                         <span class="calendar-day-name">Tue</span>
                         <span class="calendar-day-date">12</span>
-                    </div>
-                    <div class="calendar-sessions">
+                    </article>
+                    <article class="calendar-sessions">
                         <div class="calendar-session-dot completed" title="Squats - Completed"></div>
                         <div class="calendar-session-dot completed" title="Arm Circles - Completed"></div>
-                    </div>
+                    </article>
                     <p class="calendar-session-count">2 sessions</p>
-                </div>
-            </div>
+                </article>
+            </section>
 
             <!-- Click a day hint -->
             <p class="calendar-hint">Click on any day to view detailed session history</p>
@@ -251,55 +252,55 @@
 
         <!-- Overall Progress Graph -->
         <section class="progress-graph-section" style="margin-top: 40px;">
-            <div class="progress-graph-header">
-                <div>
+            <header class="progress-graph-header">
+                <section>
                     <h2 class="section-title">Recovery Progress</h2>
                     <p style="color: #64748b; font-size: 16px; margin: 8px 0 0 0;">Your improvement across all recovery stages</p>
-                </div>
-                <div class="graph-legend">
-                    <div class="legend-item">
+                </section>
+                <article class="graph-legend">
+                    <article class="legend-item">
                         <div class="legend-dot" style="background: #1e3a8a;"></div>
                         <span>Form Accuracy</span>
-                    </div>
-                    <div class="legend-item">
+                    </article>
+                    <article class="legend-item">
                         <div class="legend-dot" style="background: #10B981;"></div>
                         <span>Reps Completed</span>
-                    </div>
-                </div>
-            </div>
+                    </article>
+                </article>
+            </header>
 
-            <div class="progress-graph-card">
+            <article class="progress-graph-card">
                 <canvas id="progressChart"></canvas>
-            </div>
+            </article>
 
             <!-- Stage Milestones -->
-            <div class="milestones-grid">
+            <section class="milestones-grid">
                 <article class="milestone-card completed">
-                    <div class="milestone-icon">
+                    <figure class="milestone-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="10" fill="#10B981"/>
                             <path d="M8 12L11 15L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                    </div>
-                    <div class="milestone-content">
+                    </figure>
+                    <article class="milestone-content">
                         <h4 class="milestone-title">Stage 1</h4>
                         <p class="milestone-desc">Initial Recovery</p>
                         <p class="milestone-stat">95% avg form</p>
-                    </div>
+                    </article>
                 </article>
 
                 <article class="milestone-card completed">
-                    <div class="milestone-icon">
+                    <figure class="milestone-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="10" fill="#10B981"/>
                             <path d="M8 12L11 15L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                    </div>
-                    <div class="milestone-content">
+                    </figure>
+                    <article class="milestone-content">
                         <h4 class="milestone-title">Stage 2</h4>
                         <p class="milestone-desc">Progressive Loading</p>
                         <p class="milestone-stat">89% avg form</p>
-                    </div>
+                    </article>
                 </article>
 
                 <article class="milestone-card completed">
@@ -317,20 +318,20 @@
                 </article>
 
                 <article class="milestone-card active">
-                    <div class="milestone-icon">
+                    <figure class="milestone-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="10" fill="#1e3a8a"/>
                             <path d="M12 8V12L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                    </div>
-                    <div class="milestone-content">
+                    </figure>
+                    <article class="milestone-content">
                         <h4 class="milestone-title">Stage 4</h4>
                         <p class="milestone-desc">Near Normal Function</p>
                         <p class="milestone-stat">87% avg form</p>
                         <span class="current-badge">Current</span>
-                    </div>
+                    </article>
                 </article>
-            </div>
+            </section>
         </section>
     </main>
 

@@ -15,20 +15,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </head>
+
 <body class="exercise-body">
-    <!-- Exercise Header (Fixed) -->
+    <!-- Exercise Header -->
     <header class="exercise-header">
-        <div class="exercise-title-section">
+        <section class="exercise-title-section">
             <span class="stage-tag stage-4">Stage 4 - Near Normal Function</span>
             <h1>Squats</h1>
             <p class="exercise-purpose">Strengthen quadriceps and improve knee stability</p>
-        </div>
-        <div class="header-actions">
-            <!-- Floating Rep Counter (Always Visible) -->
-            <div class="floating-rep-counter">
+        </section>
+        <section class="header-actions">
+            <!-- Floating Rep Counter -->
+            <article class="floating-rep-counter">
                 <span class="rep-label">Reps</span>
                 <span class="rep-value" id="floatingReps">0/10</span>
-            </div>
+            </article>
             <button class="minimize-panel-btn" id="minimizeBtn" onclick="togglePanel()">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path id="toggleIcon" d="M7 10L10 7L13 10M7 14L10 11L13 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -41,15 +42,15 @@
                 </svg>
                 End Session
             </button>
-        </div>
+        </section>
     </header>
 
-    <!-- Main Exercise View (Full Height, Camera-Focused) -->
+    <!-- Main Exercise View -->
     <main class="exercise-main-new">
-        <!-- Camera Section (Full Width when panel hidden) -->
+        <!-- Camera Section                                                                                                                                                                                                                                                                                                                                                                                  -->
         <section class="camera-section-new">
-            <div class="camera-view-new">
-                <div class="camera-placeholder">
+            <article class="camera-view-new">
+                <article class="camera-placeholder">
                     <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="60" cy="60" r="60" fill="#E5E7EB"/>
                         <path d="M60 30C43.4315 30 30 43.4315 30 60C30 76.5685 43.4315 90 60 90C76.5685 90 90 76.5685 90 60C90 43.4315 76.5685 30 60 30ZM60 75C51.7157 75 45 68.2843 45 60C45 51.7157 51.7157 45 60 45C68.2843 45 75 51.7157 75 60C75 68.2843 68.2843 75 60 75Z" fill="#9CA3AF"/>
@@ -62,19 +63,19 @@
                         </svg>
                         Start Camera
                     </button>
-                </div>
+                </article>
                 
                 <!-- Real-time Feedback Overlay -->
-                <div class="feedback-overlay" id="feedbackOverlay" style="display: none;">
-                    <div class="feedback-content">
+                <article class="feedback-overlay" id="feedbackOverlay" style="display: none;">
+                    <article class="feedback-content">
                         <p class="feedback-text" id="feedbackText">Keep your back straight and lower yourself slowly</p>
                         <div class="feedback-icon"></div>
-                    </div>
-                </div>
-            </div>
+                    </article>
+                </article>
+            </article>
 
             <!-- Control Buttons (Bottom of camera) -->
-            <div class="exercise-controls-new">
+            <section class="exercise-controls-new">
                 <button class="control-btn-new pause-btn" onclick="togglePause()">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 4H6V16H8V4Z" fill="currentColor"/>
@@ -94,41 +95,41 @@
                     </svg>
                     Finish
                 </button>
-            </div>
+            </section>
         </section>
 
         <!-- Collapsible Tracking Panel (Right Side) -->
         <aside class="tracking-panel-new" id="trackingPanel">
-            <div class="panel-content">
+            <section class="panel-content">
                 <!-- Progress Ring -->
-                <div class="progress-ring-section">
-                    <div class="progress-ring-container">
+                <article class="progress-ring-section">
+                    <article class="progress-ring-container">
                         <svg class="progress-ring" width="120" height="120">
                             <circle cx="60" cy="60" r="52" stroke="#E5E7EB" stroke-width="6" fill="none"/>
                             <circle id="progressCircle" cx="60" cy="60" r="52" stroke="#1e3a8a" stroke-width="6" fill="none" 
                                     stroke-dasharray="327" stroke-dashoffset="327" stroke-linecap="round"/>
                         </svg>
-                        <div class="progress-center">
+                        <article class="progress-center">
                             <span class="progress-percent" id="progressPercent">0</span>
                             <span class="progress-label">%</span>
-                        </div>
-                    </div>
+                        </article>
+                    </article>
                     <p class="progress-text">Session Progress</p>
-                </div>
+                </article>
 
                 <!-- Current Exercise Info -->
                 <article class="panel-card">
                     <h3 class="panel-card-title">Current Exercise</h3>
                     <p class="panel-card-value">Squats</p>
-                    <div class="panel-divider"></div>
-                    <div class="panel-detail">
+                    <article class="panel-divider"></article>
+                    <article class="panel-detail">
                         <span class="detail-label">Target</span>
                         <span class="detail-value">10 reps × 3 sets</span>
-                    </div>
-                    <div class="panel-detail">
+                    </article>
+                    <article class="panel-detail">
                         <span class="detail-label">Duration</span>
                         <span class="detail-value" id="durationText">0:00</span>
-                    </div>
+                    </article>
                 </article>
 
                 <!-- Form Feedback -->
@@ -152,52 +153,52 @@
 
                 <!-- Next Exercise Preview -->
                 <article class="panel-card next-exercise">
-                    <div class="next-exercise-header">
+                    <article class="next-exercise-header">
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 3L12 9L6 15" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         <h3 class="panel-card-title">Up Next</h3>
-                    </div>
+                    </article>
                     <p class="next-exercise-name">Push-ups</p>
                     <p class="next-exercise-details">12 reps × 2 sets</p>
                 </article>
-            </div>
+            </section>
         </aside>
     </main>
 
     <!-- Completion Modal -->
-    <div class="completion-overlay" id="completionOverlay">
-        <div class="completion-modal">
-            <div class="completion-icon">
+    <section class="completion-overlay" id="completionOverlay">
+        <section class="completion-modal">
+            <figure class="completion-icon">
                 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="40" cy="40" r="40" fill="#10B981"/>
                     <path d="M25 40L35 50L55 30" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-            </div>
+            </figure>
             <h2 class="completion-title">Great Progress, Maria! 🎉</h2>
             <p class="completion-subtitle">You've completed your rehabilitation session</p>
             
             <ul class="completion-stats">
-                <li class="completion-stat">
+                <ul class="completion-stat">
                     <p class="stat-number" id="finalReps">10</p>
                     <p class="stat-label">Reps</p>
-                </li>
-                <li class="completion-stat">
+                </ul>
+                <ul class="completion-stat">
                     <p class="stat-number" id="finalAccuracy">85%</p>
                     <p class="stat-label">Form</p>
-                </li>
-                <li class="completion-stat">
+                </ul>
+                <ul class="completion-stat">
                     <p class="stat-number" id="finalDuration">5:23</p>
                     <p class="stat-label">Time</p>
-                </li>
+                </ul>
             </ul>
 
-            <div class="completion-actions">
+            <article class="completion-actions">
                 <button class="btn-secondary" onclick="window.location.href='index.html'">Back to Dashboard</button>
                 <button class="btn-primary" onclick="window.location.href='feedback.html'">View Detailed Feedback</button>
-            </div>
-        </div>
-    </div>
+            </article>
+        </section>
+    </section>
 </body>
 </html>
 

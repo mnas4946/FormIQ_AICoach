@@ -652,3 +652,145 @@ function nextExercise() {
     alert('Next exercise would load here');
 }
 
+// ============================================
+// Test Camera Page Functions
+// ============================================
+
+let testVideo = null;
+let testCanvas = null;
+let testPose = null;
+let testCamera = null;
+
+async function startQuickTest() {
+    const demoArea = document.getElementById('demoArea');
+    const placeholder = document.getElementById('placeholderText');
+    const feedbackOverlay = document.getElementById('testFeedbackOverlay');
+    
+    if (placeholder) placeholder.style.display = 'none';
+    
+    // Create video element
+    testVideo = document.createElement('video');
+    testVideo.autoplay = true;
+    testVideo.playsInline = true;
+    
+    // Create canvas for keypoints
+    testCanvas = document.createElement('canvas');
+    testCanvas.width = 640;
+    testCanvas.height = 480;
+    
+    demoArea.appendChild(testVideo);
+    demoArea.appendChild(testCanvas);
+    
+    const ctx = testCanvas.getContext('2d');
+    
+    try {
+        // Get webcam stream
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { width: 640, height: 480 },
+            audio: false
+        });
+        
+        testVideo.srcObject = stream;
+        
+        // Show feedback overlay
+        if (feedbackOverlay) {
+            feedbackOverlay.style.display = 'block';
+            feedbackOverlay.style.opacity = '1';
+            feedbackOverlay.style.zIndex = '100';
+        }
+        
+        // Initialize MediaPipe Pose
+        testPose = new Pose({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        });
+        
+        testPose.setOptions({
+            modelComplexity: 1,
+            smoothLandmarks: true,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+        
+        testPose.onResults((results) => {
+            ctx.clearRect(0, 0, testCanvas.width, testCanvas.height);
+            
+            if (results.poseLandmarks) {
+                // Draw connections
+                const connections = [
+                    [0, 1], [0, 2], [1, 3], [2, 4],
+                    [5, 6], [5, 7], [7, 9], [6, 8], [8, 10],
+                    [5, 11], [6, 12], [11, 12],
+                    [11, 13], [13, 15], [12, 14], [14, 16]
+                ];
+                
+                ctx.strokeStyle = '#00FF00';
+                ctx.lineWidth = 3;
+                
+                connections.forEach(([start, end]) => {
+                    const s = results.poseLandmarks[start];
+                    const e = results.poseLandmarks[end];
+                    if (s && e && s.visibility > 0.5 && e.visibility > 0.5) {
+                        ctx.beginPath();
+                        ctx.moveTo(s.x * testCanvas.width, s.y * testCanvas.height);
+                        ctx.lineTo(e.x * testCanvas.width, e.y * testCanvas.height);
+                        ctx.stroke();
+                    }
+                });
+                
+                // Draw keypoints
+                results.poseLandmarks.forEach(landmark => {
+                    if (landmark.visibility > 0.5) {
+                        ctx.beginPath();
+                        ctx.arc(landmark.x * testCanvas.width, landmark.y * testCanvas.height, 5, 0, 2 * Math.PI);
+                        ctx.fillStyle = '#00FF00';
+                        ctx.fill();
+                        ctx.strokeStyle = '#FFFFFF';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                });
+            }
+        });
+        
+        // Start camera
+        testCamera = new Camera(testVideo, {
+            onFrame: async () => {
+                await testPose.send({ image: testVideo });
+            },
+            width: 640,
+            height: 480
+        });
+        testCamera.start();
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Camera access denied or unavailable. Please allow camera permissions and try again.');
+        stopQuickTest();
+    }
+}
+
+function stopQuickTest() {
+    const demoArea = document.getElementById('demoArea');
+    const placeholder = document.getElementById('placeholderText');
+    const feedbackOverlay = document.getElementById('testFeedbackOverlay');
+    
+    if (testVideo && testVideo.srcObject) {
+        testVideo.srcObject.getTracks().forEach(track => track.stop());
+    }
+    
+    if (testCamera) {
+        testCamera.stop();
+    }
+    
+    if (testVideo) testVideo.remove();
+    if (testCanvas) testCanvas.remove();
+    
+    testVideo = null;
+    testCanvas = null;
+    testPose = null;
+    testCamera = null;
+    
+    if (placeholder) placeholder.style.display = 'block';
+    if (feedbackOverlay) feedbackOverlay.style.display = 'none';
+}
+

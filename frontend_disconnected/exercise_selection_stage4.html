@@ -8,28 +8,30 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js"></script>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="nav-left">
-            <div class="logo">
+        <section class="nav-left">
+            <figure class="logo">
                 <img src="media/logo.png" alt="formIQ Logo" width="120" height="32" style="object-fit: contain;">
-            </div>
-        </div>
-        <div class="nav-right">
+            </figure>
+        </section>
+        <section class="nav-right">
             <a href="index.html" class="nav-link">Dashboard</a>
             <a href="feedback.html" class="nav-link">Your Progress</a>
             <a href="#" class="nav-link">Messages</a>
             <a href="#" class="nav-link">Account</a>
-        </div>
+        </section>
     </nav>
 
     <!-- Main Content -->
     <main class="container">
         <!-- Page Header -->
         <section class="welcome-section">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <section style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
                 <button onclick="window.location.href='index.html'" style="background: #F3F4F6; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: #374151;">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -37,18 +39,18 @@
                     Back to Dashboard
                 </button>
                 <span class="stage-tag stage-4" style="background: #DBEAFE; color: #1e40af; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;">Stage 4 - Near Normal Function</span>
-            </div>
+            </section>
             <h1 class="welcome-title">Choose Your Exercise</h1>
             <p class="welcome-subtitle">Select an advanced exercise for today's rehabilitation session</p>
         </section>
 
         <!-- Exercise Selection Grid -->
         <section class="exercise-selection-section">
-            <div class="exercise-selection-grid">
+            <section class="exercise-selection-grid">
                 <!-- Exercise 1: Squats -->
                 <article class="exercise-selection-card featured" onclick="window.location.href='exercise_stage4.html'">
-                    <div class="exercise-selection-badge recommended">Recommended</div>
-                    <div class="exercise-selection-icon">
+                    <article class="exercise-selection-badge recommended">Recommended</article>
+                    <figure class="exercise-selection-icon">
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="28" cy="28" r="28" fill="#1e3a8a" fill-opacity="0.1"/>
                             <circle cx="28" cy="18" r="3" fill="#1e3a8a"/>
@@ -60,8 +62,8 @@
                             <line x1="20" y1="38" x2="20" y2="42" stroke="#1e3a8a" stroke-width="2.5" stroke-linecap="round"/>
                             <line x1="36" y1="38" x2="36" y2="42" stroke="#1e3a8a" stroke-width="2.5" stroke-linecap="round"/>
                         </svg>
-                    </div>
-                    <div class="exercise-selection-content">
+                    </figure>
+                    <article class="exercise-selection-content">
                         <h3 class="exercise-selection-title">Squats</h3>
                         <p class="exercise-selection-desc">Strengthen quadriceps and improve knee stability with controlled lowering and rising</p>
                         <ul class="exercise-selection-meta">
@@ -85,7 +87,7 @@
                                 <span>10 reps</span>
                             </li>
                         </ul>
-                    </div>
+                    </article>
                     <div class="exercise-selection-arrow">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 18L15 12L9 6" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -95,8 +97,8 @@
 
                 <!-- Exercise 2: Lunges -->
                 <article class="exercise-selection-card" onclick="alert('This exercise will be available soon!')">
-                    <div class="exercise-selection-badge coming-soon">Coming Soon</div>
-                    <div class="exercise-selection-icon">
+                    <article class="exercise-selection-badge coming-soon">Coming Soon</article>
+                    <figure class="exercise-selection-icon">
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="28" cy="28" r="28" fill="#64748b" fill-opacity="0.1"/>
                             <circle cx="28" cy="16" r="3" fill="#64748b"/>
@@ -106,8 +108,8 @@
                             <line x1="22" y1="28" x2="28" y2="42" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                             <line x1="34" y1="28" x2="40" y2="36" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                         </svg>
-                    </div>
-                    <div class="exercise-selection-content">
+                    </figure>
+                    <article class="exercise-selection-content">
                         <h3 class="exercise-selection-title">Lunges</h3>
                         <p class="exercise-selection-desc">Dynamic lower body exercise to build strength, balance, and coordination</p>
                         <ul class="exercise-selection-meta">
@@ -131,13 +133,13 @@
                                 <span>8 reps/leg</span>
                             </li>
                         </ul>
-                    </div>
+                    </article>
                 </article>
 
                 <!-- Exercise 3: Step-Ups -->
                 <article class="exercise-selection-card" onclick="alert('This exercise will be available soon!')">
-                    <div class="exercise-selection-badge coming-soon">Coming Soon</div>
-                    <div class="exercise-selection-icon">
+                    <article class="exercise-selection-badge coming-soon">Coming Soon</article>
+                    <figure class="exercise-selection-icon">
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="28" cy="28" r="28" fill="#64748b" fill-opacity="0.1"/>
                             <circle cx="28" cy="14" r="3" fill="#64748b"/>
@@ -148,8 +150,8 @@
                             <line x1="34" y1="26" x2="28" y2="36" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                             <rect x="16" y="36" width="20" height="4" fill="#64748b"/>
                         </svg>
-                    </div>
-                    <div class="exercise-selection-content">
+                    </figure>
+                    <article class="exercise-selection-content">
                         <h3 class="exercise-selection-title">Step-Ups</h3>
                         <p class="exercise-selection-desc">Functional exercise that mimics stair climbing to improve leg strength</p>
                         <ul class="exercise-selection-meta">
@@ -173,13 +175,13 @@
                                 <span>12 reps/leg</span>
                             </li>
                         </ul>
-                    </div>
+                    </article>
                 </article>
 
                 <!-- Exercise 4: Single-Leg Balance -->
                 <article class="exercise-selection-card" onclick="alert('This exercise will be available soon!')">
-                    <div class="exercise-selection-badge coming-soon">Coming Soon</div>
-                    <div class="exercise-selection-icon">
+                    <article class="exercise-selection-badge coming-soon">Coming Soon</article>
+                    <figure class="exercise-selection-icon">
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="28" cy="28" r="28" fill="#64748b" fill-opacity="0.1"/>
                             <circle cx="28" cy="16" r="3" fill="#64748b"/>
@@ -189,8 +191,8 @@
                             <line x1="28" y1="32" x2="28" y2="42" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                             <path d="M32 36C32 36 34 34 36 34" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
                         </svg>
-                    </div>
-                    <div class="exercise-selection-content">
+                    </figure>
+                    <article class="exercise-selection-content">
                         <h3 class="exercise-selection-title">Single-Leg Balance</h3>
                         <p class="exercise-selection-desc">Improve stability and proprioception with controlled single-leg standing</p>
                         <ul class="exercise-selection-meta">
@@ -214,32 +216,30 @@
                                 <span>30 sec hold</span>
                             </li>
                         </ul>
-                    </div>
+                    </article>
                 </article>
-            </div>
+            </section>
         </section>
 
         <!-- Info Box -->
         <section style="margin-top: 40px;">
-            <div style="background: #EFF6FF; border-left: 4px solid #1e3a8a; padding: 20px 24px; border-radius: 12px;">
-                <div style="display: flex; gap: 16px; align-items: start;">
+            <article style="background: #EFF6FF; border-left: 4px solid #1e3a8a; padding: 20px 24px; border-radius: 12px;">
+                <article style="display: flex; gap: 16px; align-items: start;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="12" r="10" stroke="#1e3a8a" stroke-width="2"/>
                         <path d="M12 8V12" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round"/>
                         <circle cx="12" cy="16" r="1" fill="#1e3a8a"/>
                     </svg>
-                    <div>
+                    <article>
                         <h4 style="color: #1e3a8a; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">Stage 4: Near Normal Function</h4>
                         <p style="color: #1e40af; font-size: 15px; line-height: 1.6; margin: 0;">
                             You're performing at near-normal levels! These advanced exercises challenge your strength, balance, and endurance. Focus on maintaining excellent form throughout each movement and listen to your body. You've come a long way in your recovery journey!
                         </p>
-                    </div>
-                </div>
-            </div>
+                    </article>
+                </article>
+            </article>
         </section>
     </main>
-
-    <script src="script.js"></script>
 </body>
 </html>
 

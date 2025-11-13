@@ -8,28 +8,30 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js"></script>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="nav-left">
-            <div class="logo">
+        <section class="nav-left">
+            <figure class="logo">
                 <img src="media/logo.png" alt="formIQ Logo" width="120" height="32" style="object-fit: contain;">
-            </div>
-        </div>
-        <div class="nav-right">
+            </figure>
+        </section>
+        <section class="nav-right">
             <a href="index.html" class="nav-link">Dashboard</a>
             <a href="feedback.html" class="nav-link">Your Progress</a>
             <a href="#" class="nav-link">Messages</a>
             <a href="#" class="nav-link">Account</a>
-        </div>
+        </section>
     </nav>
 
     <!-- Main Content -->
     <main class="container">
         <!-- Page Header -->
         <section class="welcome-section">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <section style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
                 <button onclick="window.location.href='index.html'" style="background: #F3F4F6; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: #374151;">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -37,17 +39,17 @@
                     Back to Dashboard
                 </button>
                 <span class="stage-tag" style="background: #DBEAFE; color: #1e40af; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;">Stage 1 - Initial Recovery</span>
-            </div>
+            </section>
             <h1 class="welcome-title">Choose Your Exercise</h1>
             <p class="welcome-subtitle">Select a basic mobility exercise to begin your rehabilitation session</p>
         </section>
 
         <!-- Exercise Selection Grid -->
         <section class="exercise-selection-section">
-            <div class="exercise-selection-grid">
+            <section class="exercise-selection-grid">
                 <!-- Exercise 1: Arm Circles -->
                 <article class="exercise-selection-card featured" onclick="window.location.href='exercise_stage1.html'">
-                    <div class="exercise-selection-icon">
+                    <figure class="exercise-selection-icon">
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="28" cy="28" r="28" fill="#1e3a8a" fill-opacity="0.1"/>
                             <circle cx="28" cy="20" r="3" fill="#1e3a8a"/>
@@ -56,32 +58,32 @@
                             <line x1="22" y1="36" x2="28" y2="44" stroke="#1e3a8a" stroke-width="2.5" stroke-linecap="round"/>
                             <line x1="34" y1="36" x2="28" y2="44" stroke="#1e3a8a" stroke-width="2.5" stroke-linecap="round"/>
                         </svg>
-                    </div>
-                    <div class="exercise-selection-content">
+                    </figure>
+                    <article class="exercise-selection-content">
                         <h3 class="exercise-selection-title">Arm Raises (Basic Arm Circles)</h3>
                         <p class="exercise-selection-desc">Gentle shoulder range of motion exercise to improve mobility and flexibility</p>
-                    <ul class="exercise-selection-meta">
-                        <li class="meta-item">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="8" cy="8" r="7" stroke="#64748b" stroke-width="1.5"/>
-                                <path d="M8 4V8L11 10" stroke="#64748b" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                            <span>4-5 min</span>
-                        </li>
-                        <li class="meta-item">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 2L9.5 6H13.5L10.25 8.5L11.5 12.5L8 10L4.5 12.5L5.75 8.5L2.5 6H6.5L8 2Z" stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <span>Low intensity</span>
-                        </li>
-                        <li class="meta-item">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 8L6 11L13 4" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <span>10 reps</span>
-                        </li>
-                    </ul>
-                    </div>
+                        <ul class="exercise-selection-meta">
+                            <li class="meta-item">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="8" r="7" stroke="#64748b" stroke-width="1.5"/>
+                                    <path d="M8 4V8L11 10" stroke="#64748b" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                                <span>4-5 min</span>
+                            </li>
+                            <li class="meta-item">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 2L9.5 6H13.5L10.25 8.5L11.5 12.5L8 10L4.5 12.5L5.75 8.5L2.5 6H6.5L8 2Z" stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Low intensity</span>
+                            </li>
+                            <li class="meta-item">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 8L6 11L13 4" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>10 reps</span>
+                            </li>
+                        </ul>
+                    </article>
                     <div class="exercise-selection-arrow">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 18L15 12L9 6" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -91,7 +93,7 @@
 
                 <!-- Exercise 2: Shoulder Raises -->
                 <article class="exercise-selection-card" onclick="alert('This exercise will be available soon!')">
-                    <div class="exercise-selection-icon">
+                    <figure class="exercise-selection-icon">
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="28" cy="28" r="28" fill="#64748b" fill-opacity="0.1"/>
                             <circle cx="28" cy="18" r="3" fill="#64748b"/>
@@ -101,8 +103,8 @@
                             <line x1="22" y1="34" x2="28" y2="42" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                             <line x1="34" y1="34" x2="28" y2="42" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                         </svg>
-                    </div>
-                    <div class="exercise-selection-content">
+                    </figure>
+                    <article class="exercise-selection-content">
                         <h3 class="exercise-selection-title">Shoulder Raises</h3>
                         <p class="exercise-selection-desc">Simple arm lifting movement to strengthen shoulder muscles and improve control</p>
                         <ul class="exercise-selection-meta">
@@ -126,12 +128,12 @@
                                 <span>12 reps</span>
                             </li>
                         </ul>
-                    </div>
+                    </article>
                 </article>
 
                 <!-- Exercise 3: Wrist Rotations -->
                 <article class="exercise-selection-card" onclick="alert('This exercise will be available soon!')">
-                    <div class="exercise-selection-icon">
+                    <figure class="exercise-selection-icon">
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="28" cy="28" r="28" fill="#64748b" fill-opacity="0.1"/>
                             <circle cx="28" cy="18" r="3" fill="#64748b"/>
@@ -141,8 +143,8 @@
                             <line x1="22" y1="34" x2="28" y2="42" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                             <line x1="34" y1="34" x2="28" y2="42" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                         </svg>
-                    </div>
-                    <div class="exercise-selection-content">
+                    </figure>
+                    <article class="exercise-selection-content">
                         <h3 class="exercise-selection-title">Wrist Rotations</h3>
                         <p class="exercise-selection-desc">Gentle circular motions to improve wrist flexibility and joint mobility</p>
                         <ul class="exercise-selection-meta">
@@ -166,7 +168,7 @@
                                 <span>15 reps</span>
                             </li>
                         </ul>
-                    </div>
+                    </article>
                 </article>
 
                 <!-- Exercise 4: Ankle Pumps -->
@@ -208,7 +210,7 @@
                         </ul>
                     </div>
                 </article>
-            </div>
+            </section>
         </section>
 
         <!-- Info Box -->
@@ -230,8 +232,6 @@
             </div>
         </section>
     </main>
-
-    <script src="script.js"></script>
 </body>
 </html>
 
