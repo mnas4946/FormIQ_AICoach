@@ -487,12 +487,18 @@ def main():
             if arm_feedback:
                 new_feedback = arm_feedback
 
-        # Update subtitle tracker if we have feedback
         if new_feedback:
-            feedback_display["text"] = new_feedback  # only natural language
+            # Always show subtitle text even if TTS is in cooldown/refuses to speak.
+            # Also update the module-level `last_feedback_time` whenever new feedback
+            # is generated so the feedback generators don't spam the same message.
+            feedback_display["text"] = new_feedback
             feedback_display["start_time"] = current_time
+            # Try to speak (may return False if TTS is cooling down)
+            try:
+                tts.speak(new_feedback)
+            except Exception:
+                pass
             last_feedback_time = current_time
-            tts.speak(new_feedback)
 
         # Draw subtitle on bottom of frame
         if current_time - feedback_display["start_time"] < feedback_display["duration"]:
