@@ -30,7 +30,7 @@ const feedbackMessages = [
 
 // Stage 1 (Arm Circles) specific feedback
 const stage1FeedbackMessages = {
-    initial: "Please get both arms in the frame",
+    initial: "Hold your arm straight to keep proper shoulder alignment.",
     rotating: [
         "Good form, remember to breathe steadily",
         "Excellent, maintain the form for 30 seconds",

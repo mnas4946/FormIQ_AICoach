@@ -2,6 +2,8 @@
 
 An AI-powered web application for physiotherapy rehabilitation with real-time pose detection, automatic rep counting, and form feedback.
 
+**Note:** While the system can run on Windows or Linux, the prototype performs best on macOS. The UI on the working prototype (not frontend UI) is smoother, webcam is faster, and text-to-speech feedback works reliably without glitches.
+
 ## ✨ Features
 
 - **Real-Time Pose Detection**: Powered by YOLOv8 (Python backend) and MediaPipe Pose (Browser frontend)
@@ -135,6 +137,7 @@ Frontend (HTML/JS) <--> MediaPipe Pose <--> Browser Webcam API
 - Visual keypoint tracking (green skeleton overlay)
 - Smooth feedback animations (50% slower transitions)
 - Works on any device with a webcam and modern browser
+- Users may need to allow camera access on their preferred browser.
 
 **To Use Standalone Mode:**
 Simply open `exercise_stage1.html` or `exercise_stage4.html` directly in your browser and click "Start Camera"

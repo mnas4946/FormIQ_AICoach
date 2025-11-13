@@ -141,7 +141,7 @@ def generate_arm_circle_feedback_clean(metrics, last_feedback_time, feedback_coo
     if (le + re)/2.0 < 160:
         screen_text.append("Keep your arms straight")
     else:
-        screen_text.append("✓ Arms straight")
+        screen_text.append("Arms straight")
     
     # Arm height
     avg_arm = (left_arm + right_arm)/2.0
@@ -156,7 +156,7 @@ def generate_arm_circle_feedback_clean(metrics, last_feedback_time, feedback_coo
     if abs(left_arm - right_arm) > 15:
         screen_text.append("Keep both arms level")
     else:
-        screen_text.append("✓ Smooth and balanced")
+        screen_text.append("Smooth and balanced")
     
     return " | ".join(screen_text)
 
