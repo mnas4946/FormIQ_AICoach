@@ -74,9 +74,6 @@ This opens an OpenCV window with pose detection. Use keyboard controls:
 - The system will automatically speak the feedback messages displayed on screen
 - 5-second cooldown between voice announcements prevents audio spam
 
-2. **Open the frontend**
-Open `frontend_disconnected/index.html` in your web browser to access the user interface.
-
 
 ## Usage Guide for Realtime Detection Working Prototype
 
