@@ -1,7 +1,8 @@
 # FormIQ - Intelligent Physiotherapy Coach
 
 An AI-powered web application for physiotherapy rehabilitation with real-time pose detection, automatic rep counting, and form feedback.
-**Note:** While the system can run on Windows or Linux, the prototype performs best on macOS. The UI is smoother, webcam is faster, and text-to-speech feedback works reliably without glitches.
+
+**Note:** While the system can run on Windows or Linux, the prototype performs best on macOS. The UI on the working prototype (not frontend UI) is smoother, webcam is faster, and text-to-speech feedback works reliably without glitches.
 
 ## ✨ Features
 
