@@ -59,8 +59,12 @@ Ensure `yolov8n-pose.pt` is present in the `models/` directory.
 
 1. **Start the AI detection backend**
 ```bash
-python core/realtime_detection.py
+cd core
 ```
+```bash
+python3 realtime_detection.py
+```
+
 This opens an OpenCV window with pose detection. Use keyboard controls:
 - **'q'** - Quit
 - **'p'** - Pause/Resume
