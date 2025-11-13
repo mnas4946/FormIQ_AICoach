@@ -230,7 +230,7 @@ def main():
         try:
             squat_checker = SquatReferenceChecker()
         except:
-            print("⚠️  Could not load reference checker, using simple rules")
+            print("Could not load reference checker, using simple rules")
             squat_checker = None
     
     if selected_exercise in ["Arm Circle", "Both"]:
@@ -437,7 +437,7 @@ def main():
             arm_rep = arm_state.update(avg_arm_angle)
             if arm_rep:
                 rep_counts["Arm Circle"] += 1
-                print(f"✓ Arm circle rep completed! Total: {rep_counts['Arm Circle']}")
+                print(f"Arm circle rep completed! Total: {rep_counts['Arm Circle']}")
                 # Speak "Rep counted" when a rep is completed
                 
     
