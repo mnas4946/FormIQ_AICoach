@@ -37,7 +37,7 @@ An AI-powered web application for physiotherapy rehabilitation with real-time po
 1. **Clone the repository**
 ```bash
 git clone <repository-url>
-cd Kinda_works_aiphysio
+cd FormIQ_AICoach
 ```
 
 2. **Install Python dependencies**
