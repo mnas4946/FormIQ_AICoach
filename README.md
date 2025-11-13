@@ -1,7 +1,6 @@
 # FormIQ - Intelligent Physiotherapy Coach
 
 An AI-powered web application for physiotherapy rehabilitation with real-time pose detection, automatic rep counting, and form feedback.
-**Note:** While the system can run on Windows or Linux, the prototype performs best on macOS. The UI of the working prototype is smoother, webcam is faster, and text-to-speech feedback works reliably without glitches.
 
 **Note:** While the system can run on Windows or Linux, the prototype performs best on macOS. The UI on the working prototype (not frontend UI) is smoother, webcam is faster, and text-to-speech feedback works reliably without glitches.
 
@@ -77,7 +76,7 @@ This opens an OpenCV window with pose detection. Use keyboard controls:
 Open `frontend_disconnected/index.html` in your web browser to access the user interface.
 
 
-## Usage Guide for Realtime Detection Working Prototype
+## Usage Guide
 
 ### For Squats (Stage 4)
 
@@ -110,18 +109,6 @@ Open `frontend_disconnected/index.html` in your web browser to access the user i
 - Up: Arms at shoulder level (> 80°)
 - Rep = Complete down → up cycle
 
-## Usage Guide for Frontend Demo
-
-To get started, open `index.html` in your web browser.
-
-### For Squats (Stage 4)
-1. Click "Start Today's Session"
-2. Select the Squats exercise option
-
-### For Arm Circles (Stage 1)
-1. Scroll down to "Access Previous Stage Exercises"
-2. Click on "Stage 1 - Initial Recovery"
-3. Select "Arm Raises (Basic Arm Circles)"
 
 ## Architecture
 
@@ -158,7 +145,7 @@ Simply open `exercise_stage1.html` or `exercise_stage4.html` directly in your br
 ## Project Structure
 
 ```
-FormIQ_AICoach/
+Kinda_works_aiphysio/
 ├── core/
 │   ├── exercises/
 │   │   ├── arm_circle_stage_1.py    # Arm circle exercise logic
@@ -199,4 +186,3 @@ FormIQ_AICoach/
 - **OpenCV** - Computer vision
 
 ---
-
