@@ -142,7 +142,7 @@ Simply open `exercise_stage1.html` or `exercise_stage4.html` directly in your br
 ## Project Structure
 
 ```
-Kinda_works_aiphysio/
+FormIQ_AICoach/
 ├── core/
 │   ├── exercises/
 │   │   ├── arm_circle_stage_1.py    # Arm circle exercise logic
